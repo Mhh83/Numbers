@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ماجراجویی اعداد مرکب - زمان، طول و جرم (کلاس پنجم)</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Vazirmatn Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #e0f2fe 0%, #fef9c3 50%, #fce7f3 100%);
+            min-height: 100vh;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        .animate-float { animation: float 3s ease-in-out infinite; }
+
+        @keyframes popIn {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-pop { animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        .btn-3d {
+            transition: all 0.1s ease;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+        }
+        .btn-3d:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+        }
+
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+
+        .clock-hand-group {
+            cursor: grab;
+        }
+        .clock-hand-group:active {
+            cursor: grabbing;
+        }
+        .scale-beam {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: 150px 75px;
+        }
+        .scale-pan-group {
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col items-center p-2 sm:p-4">
+
+    <!-- هدر بالایی -->
+    <header class="w-full max-w-5xl bg-white/95 backdrop-blur-md rounded-2xl shadow-md px-3 py-2.5 mb-3 border-2 border-sky-200 flex flex-wrap items-center justify-between gap-2">
+        <div class="flex items-center gap-2.5">
+            <div id="headerIcon" class="w-10 h-10 bg-gradient-to-tr from-amber-400 to-orange-500 rounded-xl flex items-center justify-center text-white text-xl shadow-md animate-float">
+                🧮
+            </div>
+            <div>
+                <h1 class="text-lg sm:text-xl font-black text-sky-900">ماجراجویی اعداد مرکب</h1>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium">زمان • طول • جرم | ریاضی پایه پنجم</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <button onclick="toggleTutorial(true)" class="btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2 px-3 sm:px-4 rounded-2xl text-sm flex items-center gap-1.5">
+                <span>📖</span>
+                <span>آموزش تصویری</span>
+            </button>
+            <button id="soundBtn" onclick="toggleSound()" class="btn-3d bg-sky-100 hover:bg-sky-200 text-sky-800 font-bold p-2.5 rounded-2xl text-lg" title="قطع/وصل صدا">
+                🔊
+            </button>
+            <button id="homeBtn" onclick="showMenu()" class="hidden btn-3d bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-3 rounded-2xl text-sm">
+                🏠 منو
+            </button>
+        </div>
+    </header>
+
+    <!-- صفحه منوی اصلی -->
+    <main id="menuScreen" class="w-full max-w-4xl animate-pop">
+        <div class="bg-white/95 rounded-3xl shadow-xl p-6 sm:p-8 border-2 border-indigo-100 text-center">
+            <div class="inline-block bg-amber-100 text-amber-800 font-bold px-4 py-1.5 rounded-full text-sm mb-3">
+                🌟 گام اول: موضوع را انتخاب کن • گام دوم: سطح بازی!
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-4">کدام مبحث را تمرین می‌کنی؟</h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
+                <button id="topicBtn_time" onclick="selectTopic('time')" class="cursor-pointer rounded-2xl p-4 border-4 border-amber-400 bg-amber-50 shadow-md transition-all transform scale-105 text-center">
+                    <div class="text-4xl mb-1">⏰</div>
+                    <div class="font-black text-lg text-amber-950">اعداد مرکب زمان</div>
+                    <div class="text-xs font-bold text-amber-700 mt-1">ساعت • دقیقه • ثانیه</div>
+                </button>
+
+                <button id="topicBtn_length" onclick="selectTopic('length')" class="cursor-pointer rounded-2xl p-4 border-2 border-slate-200 bg-white hover:bg-sky-50 transition-all text-center opacity-85 hover:opacity-100">
+                    <div class="text-4xl mb-1">📏</div>
+                    <div class="font-black text-lg text-sky-950">اعداد مرکب طول</div>
+                    <div class="text-xs font-bold text-sky-700 mt-1">کیلومتر • متر • سانتی‌متر</div>
+                </button>
+
+                <button id="topicBtn_mass" onclick="selectTopic('mass')" class="cursor-pointer rounded-2xl p-4 border-2 border-slate-200 bg-white hover:bg-emerald-50 transition-all text-center opacity-85 hover:opacity-100">
+                    <div class="text-4xl mb-1">⚖️</div>
+                    <div class="font-black text-lg text-emerald-950">اعداد مرکب جرم</div>
+                    <div class="text-xs font-bold text-emerald-700 mt-1">تُن • کیلوگرم • گرم</div>
+                </button>
+            </div>
+
+            <div class="border-t-2 border-slate-100 pt-6">
+                <h3 class="text-lg sm:text-xl font-black text-slate-700 mb-5">حالا سطح بازی را انتخاب کن:</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                    <div onclick="startGame(1)" class="cursor-pointer group bg-gradient-to-b from-green-50 to-emerald-100/70 border-2 border-emerald-300 rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1.5 shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 mx-auto bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md">🌱</div>
+                            <span class="bg-emerald-200 text-emerald-900 text-xs font-extrabold px-3 py-1 rounded-full">سطح ۱ • آسان</span>
+                            <h3 class="text-xl font-black text-emerald-950 mt-3 mb-2">مبتدی</h3>
+                            <p class="text-sm text-emerald-800 leading-relaxed">جمع و تفریق‌های ساده بدون نیاز به تبدیل یا قرض گرفتن.</p>
+                        </div>
+                        <button class="mt-6 w-full btn-3d bg-emerald-500 text-white font-bold py-3 rounded-2xl">شروع سطح ۱ 🚀</button>
+                    </div>
+
+                    <div onclick="startGame(2)" class="cursor-pointer group bg-gradient-to-b from-sky-50 to-blue-100/70 border-2 border-blue-300 rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1.5 shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 mx-auto bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md">🧭</div>
+                            <span class="bg-blue-200 text-blue-900 text-xs font-extrabold px-3 py-1 rounded-full">سطح ۲ • متوسط</span>
+                            <h3 class="text-xl font-black text-blue-950 mt-3 mb-2">کارآموز</h3>
+                            <p class="text-sm text-blue-800 leading-relaxed">تمرین سرریز کردن در جمع و قرض گرفتن در تفریق با میز دست‌ورزی.</p>
+                        </div>
+                        <button class="mt-6 w-full btn-3d bg-blue-500 text-white font-bold py-3 rounded-2xl">شروع سطح ۲ ⚡</button>
+                    </div>
+
+                    <div onclick="startGame(3)" class="cursor-pointer group bg-gradient-to-b from-purple-50 to-fuchsia-100/70 border-2 border-purple-300 rounded-3xl p-6 transition-all duration-200 hover:-translate-y-1.5 shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="w-14 h-14 mx-auto bg-purple-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md">👑</div>
+                            <span class="bg-purple-200 text-purple-900 text-xs font-extrabold px-3 py-1 rounded-full">سطح ۳ • پیشرفته</span>
+                            <h3 class="text-xl font-black text-purple-950 mt-3 mb-2">استاد</h3>
+                            <p class="text-sm text-purple-800 leading-relaxed">مسائل ترکیبی و مسائل داستانی جذاب روزمره.</p>
+                        </div>
+                        <button class="mt-6 w-full btn-3d bg-purple-600 text-white font-bold py-3 rounded-2xl">شروع سطح ۳ 🏆</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- صفحه بازی -->
+    <section id="gameScreen" class="hidden w-full max-w-5xl animate-pop">
+        <!-- نوار وضعیت -->
+        <div class="bg-white/95 rounded-2xl shadow-sm px-3.5 py-2.5 mb-3 border-2 border-sky-100">
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-2">
+                    <span id="topicBadge" class="bg-amber-100 text-amber-900 font-extrabold px-2.5 py-0.5 rounded-lg text-xs">⏰ زمان</span>
+                    <span id="levelBadge" class="bg-blue-100 text-blue-800 font-extrabold px-2.5 py-0.5 rounded-lg text-xs">سطح ۱</span>
+                    <span class="text-slate-600 font-bold text-xs">مرحله <span id="questionCounter" class="text-sky-600 font-black text-sm">۱</span> از ۱۰</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <div id="comboBadge" class="hidden bg-orange-100 text-orange-700 border border-orange-300 font-extrabold px-2.5 py-0.5 rounded-lg text-xs animate-bounce">
+                        🔥 <span id="comboText">۲ پاسخ پیاپی</span>
+                    </div>
+                    <div class="bg-amber-100 text-amber-900 font-black px-3 py-1 rounded-xl text-xs sm:text-sm">
+                        ⭐ امتیاز: <span id="scoreDisplay">۰</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                <div id="progressBar" class="bg-gradient-to-l from-emerald-400 to-sky-500 h-full rounded-full transition-all duration-300" style="width: 10%;"></div>
+            </div>
+        </div>
+
+        <!-- کارت سوال -->
+        <div id="questionCard" class="bg-white rounded-3xl shadow-xl p-3.5 sm:p-5 border-2 border-indigo-100">
+            <div id="storyBox" class="hidden bg-amber-50 border-r-4 border-amber-400 p-2.5 sm:p-3 rounded-xl mb-3 text-slate-800 text-xs sm:text-sm leading-relaxed shadow-sm">
+                <div class="font-bold text-amber-800 mb-0.5">📜 مسئله داستانی:</div>
+                <p id="storyText"></p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <h3 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span>
+                    <span>عبارت زیر را به صورت ستونی حل کن:</span>
+                </h3>
+                <button onclick="toggleManipulativeLab()" class="btn-3d bg-indigo-100 hover:bg-indigo-200 text-indigo-900 font-extrabold text-xs px-3 py-1.5 rounded-xl border border-indigo-300">
+                    🧰 <span id="toggleManipText">مخفی کردن میز دست‌ورزی</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-start">
+                <!-- میز دست‌ورزی -->
+                <div id="manipulativeLab" class="lg:col-span-6 bg-gradient-to-br from-indigo-50 via-sky-50 to-emerald-50 border-2 border-indigo-200 rounded-2xl p-3 shadow-inner">
+                    <div class="flex flex-wrap items-center justify-between gap-1.5 mb-2 pb-1.5 border-b border-indigo-200/70">
+                        <div class="flex items-center gap-1.5">
+                            <span id="manipIcon" class="text-xl">🧰</span>
+                            <div>
+                                <h4 id="manipTitle" class="font-black text-indigo-950 text-xs sm:text-sm">میز دست‌ورزی تعاملی</h4>
+                                <p id="manipSubtitle" class="text-[11px] text-indigo-700 font-medium">عقربه‌ها و ابزارها را بکش و تغییر بده!</p>
+                            </div>
+                        </div>
+                        <span id="manipRuleBadge" class="bg-white text-indigo-900 font-extrabold text-[11px] px-2.5 py-0.5 rounded-full border border-indigo-200 shadow-sm">
+                            مبنای تبدیل
+                        </span>
+                    </div>
+
+                    <div id="manipWorkspace" class="space-y-2"></div>
+                </div>
+
+                <!-- جدول محاسبات ستونی -->
+                <div id="calcColumnWrapper" class="lg:col-span-6 bg-slate-50/70 rounded-2xl p-3 sm:p-4 border-2 border-sky-200">
+                    <div class="overflow-x-auto">
+                        <div dir="ltr" class="min-w-[270px] max-w-md mx-auto bg-slate-50 rounded-xl p-2.5 sm:p-3.5 border border-slate-200 shadow-inner">
+                            <div class="grid grid-cols-10 gap-1.5 text-center font-black text-xs sm:text-sm mb-1.5">
+                                <div class="col-span-1"></div>
+                                <div id="hdrUnit0" class="col-span-3 bg-purple-100 text-purple-900 py-1 rounded-lg border border-purple-200">ساعت</div>
+                                <div id="hdrUnit1" class="col-span-3 bg-sky-100 text-sky-900 py-1 rounded-lg border border-sky-200">دقیقه</div>
+                                <div id="hdrUnit2" class="col-span-3 bg-emerald-100 text-emerald-900 py-1 rounded-lg border border-emerald-200">ثانیه</div>
+                            </div>
+
+                            <!-- دکمه‌های کمکی قرض گرفتن و پس دادن -->
+                            <div id="helperButtonsRow" class="grid grid-cols-10 gap-1.5 text-center mb-1">
+                                <div class="col-span-1"></div>
+                                <div class="col-span-3 flex flex-col items-center gap-1">
+                                    <button id="borrowHourBtn" onclick="borrowFromUnit0()" class="hidden text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 px-1.5 py-0.5 rounded shadow">قرض به وسط ⤵️</button>
+                                    <button id="unborrowHourBtn" onclick="unborrowToUnit0()" class="hidden text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300 px-1.5 py-0.5 rounded">⤴️ پس دادن</button>
+                                </div>
+                                <div class="col-span-3 flex flex-col items-center gap-1">
+                                    <button id="borrowMinBtn" onclick="borrowFromUnit1()" class="hidden text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 px-1.5 py-0.5 rounded shadow">قرض به راست ⤵️</button>
+                                    <button id="unborrowMinBtn" onclick="unborrowToUnit1()" class="hidden text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300 px-1.5 py-0.5 rounded">⤴️ پس دادن</button>
+                                </div>
+                                <div class="col-span-3"></div>
+                            </div>
+
+                            <!-- ردیف عدد اول -->
+                            <div class="grid grid-cols-10 gap-1.5 items-center text-center text-lg sm:text-2xl font-black text-slate-800 py-0.5">
+                                <div class="col-span-1"></div>
+                                <div id="topHour" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm transition-colors">0</div>
+                                <div id="topMin" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm transition-colors">0</div>
+                                <div id="topSec" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm transition-colors">0</div>
+                            </div>
+
+                            <!-- ردیف عدد دوم -->
+                            <div class="grid grid-cols-10 gap-1.5 items-center text-center text-lg sm:text-2xl font-black text-slate-800 py-0.5">
+                                <div id="operatorSymbol" class="col-span-1 text-2xl font-black text-rose-500">+</div>
+                                <div id="botHour" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm">0</div>
+                                <div id="botMin" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm">0</div>
+                                <div id="botSec" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm">0</div>
+                            </div>
+
+                            <div class="border-b-4 border-slate-700 my-1.5 rounded-full"></div>
+
+                            <!-- ردیف پاسخ دانش‌آموز -->
+                            <div class="grid grid-cols-10 gap-1.5 items-center text-center pt-0.5">
+                                <div class="col-span-1 text-lg font-black text-slate-400">=</div>
+                                <div class="col-span-3">
+                                    <input type="number" id="ansHour" placeholder="؟" class="w-full text-center text-lg sm:text-2xl font-black text-purple-900 bg-purple-50 border-2 border-purple-300 rounded-lg py-1.5 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                                </div>
+                                <div class="col-span-3">
+                                    <input type="number" id="ansMin" placeholder="؟" class="w-full text-center text-lg sm:text-2xl font-black text-sky-900 bg-sky-50 border-2 border-sky-300 rounded-lg py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400">
+                                </div>
+                                <div class="col-span-3">
+                                    <input type="number" id="ansSec" placeholder="؟" class="w-full text-center text-lg sm:text-2xl font-black text-emerald-900 bg-emerald-50 border-2 border-emerald-300 rounded-lg py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-400">
+                                </div>
+                            </div>
+
+                            <!-- دکمه‌های تبدیل واحد در جمع -->
+                            <div id="carryButtonsRow" class="grid grid-cols-10 gap-1.5 text-center mt-1.5">
+                                <div class="col-span-1"></div>
+                                <div class="col-span-3"></div>
+                                <div class="col-span-3 flex justify-center">
+                                    <button id="carryMinBtn" onclick="carryUnit1ToUnit0()" class="hidden text-[10px] font-bold bg-indigo-500 hover:bg-indigo-600 text-white px-1.5 py-0.5 rounded shadow">⬅️ تبدیل واحد</button>
+                                </div>
+                                <div class="col-span-3 flex justify-center">
+                                    <button id="carrySecBtn" onclick="carryUnit2ToUnit1()" class="hidden text-[10px] font-bold bg-indigo-500 hover:bg-indigo-600 text-white px-1.5 py-0.5 rounded shadow">⬅️ تبدیل واحد</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="feedbackBox" class="hidden mt-2.5 p-2.5 rounded-xl border-2 text-xs leading-relaxed animate-pop">
+                        <div class="flex items-start gap-2">
+                            <span id="feedbackIcon" class="text-lg">💡</span>
+                            <div>
+                                <h4 id="feedbackTitle" class="font-black text-xs sm:text-sm mb-0.5">راهنمایی</h4>
+                                <p id="feedbackText" class="font-medium"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 flex flex-wrap items-center justify-center gap-2">
+                        <button id="checkBtn" onclick="checkAnswer()" class="btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-black text-xs sm:text-sm py-2 px-4 rounded-xl">✅ بررسی پاسخ</button>
+                        <button id="hintBtn" onclick="showSmartHint()" class="btn-3d bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold text-xs sm:text-sm py-2 px-4 rounded-xl">💡 راهنمایی هوشمند</button>
+                        <button id="nextBtn" onclick="nextQuestion()" class="hidden btn-3d bg-sky-500 hover:bg-sky-600 text-white font-black text-xs sm:text-sm py-2 px-5 rounded-xl animate-bounce">سوال بعدی ⬅️</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- صفحه نتایج نهایی -->
+    <section id="resultScreen" class="hidden w-full max-w-2xl animate-pop">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 sm:p-10 border-4 border-amber-300 text-center">
+            <div class="text-6xl sm:text-7xl mb-4 animate-float">🏆</div>
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mt-3 mb-2">آفرین قهرمان!</h2>
+            <p class="text-slate-600 text-sm mb-4">تمامی مراحل این سطح را به پایان رساندی.</p>
+            <div id="starsContainer" class="flex justify-center gap-3 text-4xl sm:text-5xl mb-6">⭐⭐⭐</div>
+            <div class="grid grid-cols-3 gap-3 mb-8">
+                <div class="bg-sky-50 p-4 rounded-2xl border border-sky-200">
+                    <div class="text-xs text-sky-700 font-bold mb-1">امتیاز کل</div>
+                    <div id="finalScore" class="text-2xl font-black text-sky-900">۰</div>
+                </div>
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
+                    <div class="text-xs text-emerald-700 font-bold mb-1">پاسخ درست</div>
+                    <div id="finalCorrect" class="text-2xl font-black text-emerald-900">۰ از ۱۰</div>
+                </div>
+                <div class="bg-orange-50 p-4 rounded-2xl border border-orange-200">
+                    <div class="text-xs text-orange-700 font-bold mb-1">رکورد پیاپی</div>
+                    <div id="finalMaxCombo" class="text-2xl font-black text-orange-900">۰</div>
+                </div>
+            </div>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="restartCurrentLevel()" class="btn-3d bg-emerald-500 hover:bg-emerald-600 text-white font-black py-3 px-6 rounded-2xl">🔄 تکرار سطح</button>
+                <button onclick="showMenu()" class="btn-3d bg-indigo-500 hover:bg-indigo-600 text-white font-black py-3 px-6 rounded-2xl">🎯 بازگشت به منو</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- پنجره آموزش تصویری -->
+    <div id="tutorialModal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-3">
+        <div class="bg-white rounded-3xl max-w-2xl w-full p-5 sm:p-8 shadow-2xl border-4 border-sky-300 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b-2 border-slate-100 pb-4 mb-5">
+                <h2 class="text-xl font-black text-sky-900">🎓 راهنمای سریع اعداد مرکب</h2>
+                <button onclick="toggleTutorial(false)" class="bg-rose-100 hover:bg-rose-200 text-rose-700 font-black w-9 h-9 rounded-full">✕</button>
+            </div>
+            <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
+                <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200">
+                    <div class="font-black text-amber-900 mb-1">⏰ واحدهای زمان (مبنای ۶۰):</div>
+                    <p>هر <strong>۶۰ ثانیه</strong> = ۱ دقیقه | هر <strong>۶۰ دقیقه</strong> = ۱ ساعت</p>
+                </div>
+                <div class="bg-sky-50 p-3.5 rounded-2xl border border-sky-200">
+                    <div class="font-black text-sky-900 mb-1">📏 واحدهای طول (مبنای ۱۰۰ و ۱۰۰۰):</div>
+                    <p>هر <strong>۱۰۰ سانتی‌متر</strong> = ۱ متر | هر <strong>۱۰۰۰ متر</strong> = ۱ کیلومتر</p>
+                </div>
+                <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200">
+                    <div class="font-black text-emerald-900 mb-1">⚖️ واحدهای جرم (مبنای ۱۰۰۰):</div>
+                    <p>هر <strong>۱۰۰۰ گرم</strong> = ۱ کیلوگرم | هر <strong>۱۰۰۰ کیلوگرم</strong> = ۱ تُن</p>
+                </div>
+                <div class="bg-indigo-50 p-3.5 rounded-2xl border border-indigo-200 text-xs">
+                    <strong>نکته کلیدی:</strong> در جمع اگر حاصل یک ستون از مبنا بیشتر شد از دکمه <strong>«تبدیل واحد»</strong> استفاده کن. در تفریق اگر عدد بالا کوچک‌تر از پایین بود از ستون کناری <strong>«قرض»</strong> بگیر!
+                </div>
+            </div>
+            <div class="mt-6 text-center">
+                <button onclick="toggleTutorial(false)" class="btn-3d bg-sky-500 hover:bg-sky-600 text-white font-black py-2.5 px-6 rounded-xl">متوجه شدم 👍</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        function toPersianNum(n) { return String(n).replace(/\d/g, d => persianDigits[d]); }
+        function randInt(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+        }
+
+        function playSound(type) {
+            if (!soundEnabled) return;
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                const t = audioCtx.currentTime;
+                if (type === 'pop') {
+                    osc.frequency.setValueAtTime(520, t); osc.frequency.exponentialRampToValueAtTime(720, t + 0.06);
+                    gain.gain.setValueAtTime(0.08, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.06);
+                    osc.start(t); osc.stop(t + 0.06);
+                } else if (type === 'tick') {
+                    osc.frequency.setValueAtTime(880, t);
+                    gain.gain.setValueAtTime(0.03, t); gain.gain.exponentialRampToValueAtTime(0.001, t + 0.025);
+                    osc.start(t); osc.stop(t + 0.025);
+                } else if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523, t); osc.frequency.setValueAtTime(659, t + 0.1); osc.frequency.setValueAtTime(784, t + 0.2);
+                    gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.35);
+                    osc.start(t); osc.stop(t + 0.35);
+                } else if (type === 'wrong') {
+                    osc.frequency.setValueAtTime(210, t); osc.frequency.linearRampToValueAtTime(140, t + 0.22);
+                    gain.gain.setValueAtTime(0.15, t); gain.gain.exponentialRampToValueAtTime(0.01, t + 0.22);
+                    osc.start(t); osc.stop(t + 0.22);
+                }
+            } catch(e) {}
+        }
+
+        const TOPIC_CONFIG = {
+            time: {
+                id: 'time', name: 'زمان', badge: '⏰ زمان', icon: '⏰',
+                units: ['ساعت', 'دقیقه', 'ثانیه'], base0to1: 60, base1to2: 60,
+                ruleText: '۱ ساعت = ۶۰ دقیقه | ۱ دقیقه = ۶۰ ثانیه'
+            },
+            length: {
+                id: 'length', name: 'طول', badge: '📏 طول', icon: '📏',
+                units: ['کیلومتر', 'متر', 'سانتی‌متر'], base0to1: 1000, base1to2: 100,
+                ruleText: '۱ کیلومتر = ۱۰۰۰ متر | ۱ متر = ۱۰۰ سانتی‌متر'
+            },
+            mass: {
+                id: 'mass', name: 'جرم', badge: '⚖️ جرم', icon: '⚖️',
+                units: ['تُن', 'کیلوگرم', 'گرم'], base0to1: 1000, base1to2: 1000,
+                ruleText: '۱ تُن = ۱۰۰۰ کیلوگرم | ۱ کیلوگرم = ۱۰۰۰ گرم'
+            }
+        };
+
+        let gameState = {
+            topic: 'time', level: 1, currentQIndex: 0, totalQuestions: 10,
+            score: 0, correctCount: 0, combo: 0, maxCombo: 0,
+            question: null, workTop0: 0, workTop1: 0, workTop2: 0,
+            borrowCount0: 0, borrowCount1: 0, answeredCurrent: false, usedHintCurrent: false, manipVisible: true
+        };
+
+        function selectTopic(topicId) {
+            playSound('pop');
+            gameState.topic = topicId;
+            ['time', 'length', 'mass'].forEach(t => {
+                const btn = document.getElementById(`topicBtn_${t}`);
+                if (t === topicId) {
+                    btn.className = 'cursor-pointer rounded-2xl p-4 border-4 border-amber-400 bg-amber-50 shadow-md transform scale-105 text-center transition-all';
+                } else {
+                    btn.className = 'cursor-pointer rounded-2xl p-4 border-2 border-slate-200 bg-white hover:bg-slate-50 text-center opacity-85 transition-all';
+                }
+            });
+            document.getElementById('headerIcon').textContent = TOPIC_CONFIG[topicId].icon;
+        }
+
+        function showMenu() {
+            playSound('pop');
+            document.getElementById('menuScreen').classList.remove('hidden');
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('homeBtn').classList.add('hidden');
+        }
+
+        function startGame(level) {
+            playSound('pop');
+            gameState.level = level;
+            gameState.currentQIndex = 0;
+            gameState.score = 0;
+            gameState.correctCount = 0;
+            gameState.combo = 0;
+            gameState.maxCombo = 0;
+
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            document.getElementById('menuScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            document.getElementById('homeBtn').classList.remove('hidden');
+
+            document.getElementById('topicBadge').textContent = cfg.badge;
+            document.getElementById('levelBadge').textContent = `سطح ${toPersianNum(level)}`;
+            document.getElementById('hdrUnit0').textContent = cfg.units[0];
+            document.getElementById('hdrUnit1').textContent = cfg.units[1];
+            document.getElementById('hdrUnit2').textContent = cfg.units[2];
+
+            updateStatsUI();
+            loadNewQuestion();
+        }
+
+        function restartCurrentLevel() { startGame(gameState.level); }
+
+        function generateQuestionData(topic, level) {
+            const cfg = TOPIC_CONFIG[topic];
+            const op = Math.random() < 0.5 ? '+' : '-';
+            let u0a = 1, u1a = 20, u2a = 20, u0b = 1, u1b = 10, u2b = 10;
+
+            if (level === 1) {
+                if (op === '+') {
+                    u0a = randInt(1, 4); u0b = randInt(1, 4);
+                    u1a = randInt(10, Math.floor(cfg.base0to1 * 0.45));
+                    u1b = randInt(5, Math.floor(cfg.base0to1 * 0.45));
+                    u2a = randInt(10, Math.floor(cfg.base1to2 * 0.45));
+                    u2b = randInt(5, Math.floor(cfg.base1to2 * 0.45));
+                } else {
+                    u0a = randInt(4, 8); u0b = randInt(1, u0a - 1);
+                    u1a = randInt(Math.floor(cfg.base0to1 * 0.5), cfg.base0to1 - 5);
+                    u1b = randInt(5, u1a - 2);
+                    u2a = randInt(Math.floor(cfg.base1to2 * 0.5), cfg.base1to2 - 5);
+                    u2b = randInt(5, u2a - 2);
+                }
+            } else if (level === 2) {
+                if (op === '+') {
+                    u0a = randInt(1, 4); u0b = randInt(1, 4);
+                    u1a = randInt(Math.floor(cfg.base0to1 * 0.55), cfg.base0to1 - 5);
+                    u1b = randInt(Math.floor(cfg.base0to1 * 0.5), cfg.base0to1 - 5);
+                    u2a = randInt(Math.floor(cfg.base1to2 * 0.55), cfg.base1to2 - 5);
+                    u2b = randInt(Math.floor(cfg.base1to2 * 0.5), cfg.base1to2 - 5);
+                } else {
+                    u0a = randInt(4, 8); u0b = randInt(1, u0a - 2);
+                    u1a = randInt(5, Math.floor(cfg.base0to1 * 0.35));
+                    u1b = randInt(Math.floor(cfg.base0to1 * 0.55), cfg.base0to1 - 5);
+                    u2a = randInt(5, Math.floor(cfg.base1to2 * 0.35));
+                    u2b = randInt(Math.floor(cfg.base1to2 * 0.55), cfg.base1to2 - 5);
+                }
+            } else {
+                if (op === '+') {
+                    u0a = randInt(2, 6); u0b = randInt(1, 5);
+                    u1a = randInt(Math.floor(cfg.base0to1 * 0.6), cfg.base0to1 - 2);
+                    u1b = randInt(Math.floor(cfg.base0to1 * 0.55), cfg.base0to1 - 2);
+                    u2a = randInt(Math.floor(cfg.base1to2 * 0.6), cfg.base1to2 - 2);
+                    u2b = randInt(Math.floor(cfg.base1to2 * 0.55), cfg.base1to2 - 2);
+                } else {
+                    u0a = randInt(5, 10); u0b = randInt(1, u0a - 2);
+                    u1a = randInt(5, Math.floor(cfg.base0to1 * 0.3));
+                    u1b = randInt(Math.floor(cfg.base0to1 * 0.6), cfg.base0to1 - 3);
+                    u2a = randInt(5, Math.floor(cfg.base1to2 * 0.3));
+                    u2b = randInt(Math.floor(cfg.base1to2 * 0.6), cfg.base1to2 - 3);
+                }
+            }
+
+            const totalA = (u0a * cfg.base0to1 + u1a) * cfg.base1to2 + u2a;
+            const totalB = (u0b * cfg.base0to1 + u1b) * cfg.base1to2 + u2b;
+            const totalAns = op === '+' ? totalA + totalB : totalA - totalB;
+
+            const ans2 = totalAns % cfg.base1to2;
+            const mid = Math.floor(totalAns / cfg.base1to2);
+            const ans1 = mid % cfg.base0to1;
+            const ans0 = Math.floor(mid / cfg.base0to1);
+
+            let story = '';
+            if (level === 3) {
+                if (topic === 'time') {
+                    if (op === '+') {
+                        story = `سارا در نوبت صبح ${toPersianNum(u0a)} ساعت و ${toPersianNum(u1a)} دقیقه و ${toPersianNum(u2a)} ثانیه مطالعه کرد و در نوبت عصر ${toPersianNum(u0b)} ساعت و ${toPersianNum(u1b)} دقیقه و ${toPersianNum(u2b)} ثانیه درس خواند. مجموع زمان مطالعه سارا چقدر است؟`;
+                    } else {
+                        story = `زمان کل یک مسابقه دوچرخه‌سواری ${toPersianNum(u0a)} ساعت و ${toPersianNum(u1a)} دقیقه و ${toPersianNum(u2a)} ثانیه است. اگر تا کنون ${toPersianNum(u0b)} ساعت و ${toPersianNum(u1b)} دقیقه و ${toPersianNum(u2b)} ثانیه از آن گذشته باشد، چقدر زمان باقی مانده است؟`;
+                    }
+                } else if (topic === 'length') {
+                    if (op === '+') {
+                        story = `یک گروه کوهنوردی روز اول ${toPersianNum(u0a)} کیلومتر و ${toPersianNum(u1a)} متر و ${toPersianNum(u2a)} سانتی‌متر و روز دوم ${toPersianNum(u0b)} کیلومتر و ${toPersianNum(u1b)} متر و ${toPersianNum(u2b)} سانتی‌متر پیاده‌روی کردند. مسافت کل طی شده چقدر است؟`;
+                    } else {
+                        story = `طول یک طناب کوهنوردی ${toPersianNum(u0a)} کیلومتر و ${toPersianNum(u1a)} متر و ${toPersianNum(u2a)} سانتی‌متر است. اگر ${toPersianNum(u0b)} کیلومتر و ${toPersianNum(u1b)} متر و ${toPersianNum(u2b)} سانتی‌متر از آن را ببریم، چه مقدار طناب باقی می‌ماند؟`;
+                    }
+                } else {
+                    if (op === '+') {
+                        story = `کامیون اول ${toPersianNum(u0a)} تُن و ${toPersianNum(u1a)} کیلوگرم و ${toPersianNum(u2a)} گرم بار دارد و کامیون دوم ${toPersianNum(u0b)} تُن و ${toPersianNum(u1b)} کیلوگرم و ${toPersianNum(u2b)} گرم بار حمل می‌کند. جرم کل بار هر دو کامیون چقدر است؟`;
+                    } else {
+                        story = `در یک انبار ${toPersianNum(u0a)} تُن و ${toPersianNum(u1a)} کیلوگرم و ${toPersianNum(u2a)} گرم برنج وجود داشت. اگر ${toPersianNum(u0b)} تُن و ${toPersianNum(u1b)} کیلوگرم و ${toPersianNum(u2b)} گرم از آن فروخته شود، چقدر برنج در انبار باقی می‌ماند؟`;
+                    }
+                }
+            }
+
+            return { op, u0a, u1a, u2a, u0b, u1b, u2b, ans0, ans1, ans2, story };
+        }
+
+        function loadNewQuestion() {
+            gameState.currentQIndex++;
+            gameState.answeredCurrent = false;
+            gameState.usedHintCurrent = false;
+            gameState.borrowCount0 = 0;
+            gameState.borrowCount1 = 0;
+
+            const q = generateQuestionData(gameState.topic, gameState.level);
+            gameState.question = q;
+            gameState.workTop0 = q.u0a;
+            gameState.workTop1 = q.u1a;
+            gameState.workTop2 = q.u2a;
+
+            document.getElementById('questionCounter').textContent = toPersianNum(gameState.currentQIndex);
+            document.getElementById('progressBar').style.width = `${(gameState.currentQIndex / 10) * 100}%`;
+
+            const storyBox = document.getElementById('storyBox');
+            if (q.story) {
+                document.getElementById('storyText').textContent = q.story;
+                storyBox.classList.remove('hidden');
+            } else {
+                storyBox.classList.add('hidden');
+            }
+
+            const opEl = document.getElementById('operatorSymbol');
+            opEl.textContent = q.op;
+            opEl.className = q.op === '+' ? 'col-span-1 text-2xl font-black text-emerald-600' : 'col-span-1 text-2xl font-black text-rose-500';
+
+            document.getElementById('botHour').textContent = toPersianNum(q.u0b);
+            document.getElementById('botMin').textContent = toPersianNum(q.u1b);
+            document.getElementById('botSec').textContent = toPersianNum(q.u2b);
+
+            ['ansHour', 'ansMin', 'ansSec'].forEach(id => {
+                const inp = document.getElementById(id);
+                inp.value = '';
+                inp.disabled = false;
+                inp.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50');
+            });
+
+            document.getElementById('feedbackBox').classList.add('hidden');
+            document.getElementById('checkBtn').classList.remove('hidden');
+            document.getElementById('hintBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+
+            renderTopRow();
+            setupHelperButtons();
+            initManipulativeState();
+            renderManipulativeLab();
+        }
+
+        function renderTopRow() {
+            const top0 = document.getElementById('topHour');
+            const top1 = document.getElementById('topMin');
+            const top2 = document.getElementById('topSec');
+
+            top0.textContent = toPersianNum(gameState.workTop0);
+            top1.textContent = toPersianNum(gameState.workTop1);
+            top2.textContent = toPersianNum(gameState.workTop2);
+
+            top0.classList.toggle('bg-amber-50', gameState.borrowCount0 > 0);
+            top1.classList.toggle('bg-amber-50', gameState.borrowCount0 > 0 || gameState.borrowCount1 > 0);
+            top2.classList.toggle('bg-amber-50', gameState.borrowCount1 > 0);
+        }
+
+        function setupHelperButtons() {
+            const q = gameState.question;
+            const bHour = document.getElementById('borrowHourBtn');
+            const uHour = document.getElementById('unborrowHourBtn');
+            const bMin = document.getElementById('borrowMinBtn');
+            const uMin = document.getElementById('unborrowMinBtn');
+            const cMin = document.getElementById('carryMinBtn');
+            const cSec = document.getElementById('carrySecBtn');
+
+            if (q.op === '-') {
+                cMin.classList.add('hidden');
+                cSec.classList.add('hidden');
+                bHour.classList.toggle('hidden', gameState.workTop0 <= 0);
+                bMin.classList.toggle('hidden', gameState.workTop1 <= 0);
+                uHour.classList.toggle('hidden', gameState.borrowCount0 <= 0);
+                uMin.classList.toggle('hidden', gameState.borrowCount1 <= 0);
+            } else {
+                bHour.classList.add('hidden');
+                uHour.classList.add('hidden');
+                bMin.classList.add('hidden');
+                uMin.classList.add('hidden');
+                cMin.classList.remove('hidden');
+                cSec.classList.remove('hidden');
+            }
+        }
+
+        function borrowFromUnit0() {
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            if (gameState.workTop0 <= 0) return;
+            playSound('pop');
+            gameState.workTop0 -= 1;
+            gameState.workTop1 += cfg.base0to1;
+            gameState.borrowCount0++;
+            renderTopRow();
+            setupHelperButtons();
+        }
+
+        function unborrowToUnit0() {
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            if (gameState.borrowCount0 <= 0) return;
+            playSound('pop');
+            gameState.workTop1 -= cfg.base0to1;
+            gameState.workTop0 += 1;
+            gameState.borrowCount0--;
+            renderTopRow();
+            setupHelperButtons();
+        }
+
+        function borrowFromUnit1() {
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            if (gameState.workTop1 <= 0) return;
+            playSound('pop');
+            gameState.workTop1 -= 1;
+            gameState.workTop2 += cfg.base1to2;
+            gameState.borrowCount1++;
+            renderTopRow();
+            setupHelperButtons();
+        }
+
+        function unborrowToUnit1() {
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            if (gameState.borrowCount1 <= 0) return;
+            playSound('pop');
+            gameState.workTop2 -= cfg.base1to2;
+            gameState.workTop1 += 1;
+            gameState.borrowCount1--;
+            renderTopRow();
+            setupHelperButtons();
+        }
+
+        function carryUnit2ToUnit1() {
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            const i2 = document.getElementById('ansSec');
+            const i1 = document.getElementById('ansMin');
+            let v2 = parseInt(i2.value) || 0;
+            let v1 = parseInt(i1.value) || 0;
+            if (v2 >= cfg.base1to2) {
+                playSound('pop');
+                const carry = Math.floor(v2 / cfg.base1to2);
+                i2.value = v2 % cfg.base1to2;
+                i1.value = v1 + carry;
+            } else {
+                playSound('wrong');
+                showFeedback('info', 'نیاز به تبدیل نیست', `عدد ستون راست باید حداقل ${toPersianNum(cfg.base1to2)} باشد تا تبدیل شود.`);
+            }
+        }
+
+        function carryUnit1ToUnit0() {
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            const i1 = document.getElementById('ansMin');
+            const i0 = document.getElementById('ansHour');
+            let v1 = parseInt(i1.value) || 0;
+            let v0 = parseInt(i0.value) || 0;
+            if (v1 >= cfg.base0to1) {
+                playSound('pop');
+                const carry = Math.floor(v1 / cfg.base0to1);
+                i1.value = v1 % cfg.base0to1;
+                i0.value = v0 + carry;
+            } else {
+                playSound('wrong');
+                showFeedback('info', 'نیاز به تبدیل نیست', `عدد ستون وسط باید حداقل ${toPersianNum(cfg.base0to1)} باشد تا تبدیل شود.`);
+            }
+        }
+
+        let manipState = {
+            clockSec: 0,
+            rulerCm: 0,
+            scaleLeft: 0,
+            scaleRight: 0
+        };
+
+        function toggleManipulativeLab() {
+            playSound('pop');
+            gameState.manipVisible = !gameState.manipVisible;
+            document.getElementById('manipulativeLab').classList.toggle('hidden', !gameState.manipVisible);
+            document.getElementById('calcColumnWrapper').className = gameState.manipVisible ? 'lg:col-span-6 bg-slate-50/70 rounded-2xl p-3 border-2 border-sky-200' : 'lg:col-span-12 bg-slate-50/70 rounded-2xl p-3 border-2 border-sky-200';
+            document.getElementById('toggleManipText').textContent = gameState.manipVisible ? 'مخفی کردن میز دست‌ورزی' : 'نمایش میز دست‌ورزی 🧰';
+        }
+
+        function initManipulativeState() {
+            const q = gameState.question;
+            if (!q) return;
+            if (gameState.topic === 'time') manipState.clockSec = ((q.u0a % 12) * 3600 + q.u1a * 60 + q.u2a) % 43200;
+            else if (gameState.topic === 'length') manipState.rulerCm = q.u2a;
+            else {
+                manipState.scaleLeft = q.u2a;
+                manipState.scaleRight = q.u2b;
+            }
+        }
+
+        function renderManipulativeLab() {
+            if (!gameState.manipVisible) return;
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            document.getElementById('manipIcon').textContent = cfg.icon;
+            document.getElementById('manipTitle').textContent = `میز دست‌ورزی ${cfg.name}`;
+            document.getElementById('manipRuleBadge').textContent = cfg.ruleText;
+
+            const ws = document.getElementById('manipWorkspace');
+            if (gameState.topic === 'time') renderClockLab(ws);
+            else if (gameState.topic === 'length') renderRulerLab(ws);
+            else renderScaleLab(ws);
+        }
+
+        function renderClockLab(container) {
+            let ticksSvg = '';
+            for (let i = 0; i < 60; i++) {
+                const angle = i * 6;
+                if (i % 5 === 0) {
+                    ticksSvg += `<g transform="rotate(${angle} 130 130)"><rect x="128" y="18" width="4" height="10" rx="2" fill="#4f46e5"/></g>`;
+                } else {
+                    ticksSvg += `<line x1="130" y1="20" x2="130" y2="25" stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round" transform="rotate(${angle} 130 130)" />`;
+                }
+            }
+
+            const persianHours = ['۱۲', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹', '۱۰', '۱۱'];
+            let numbersSvg = '';
+            for (let i = 0; i < 12; i++) {
+                const rad = (i * 30 - 90) * (Math.PI / 180);
+                const nx = 130 + 82 * Math.cos(rad);
+                const ny = 130 + 82 * Math.sin(rad) + 5;
+                const isMain = i % 3 === 0;
+                numbersSvg += `<text x="${nx.toFixed(1)}" y="${ny.toFixed(1)}" font-size="${isMain ? '17' : '14'}" font-weight="${isMain ? '900' : '800'}" fill="${isMain ? '#1e1b4b' : '#475569'}" text-anchor="middle">${persianHours[i]}</text>`;
+            }
+
+            container.innerHTML = `
+                <div class="flex flex-col items-center gap-2.5 bg-gradient-to-b from-white to-indigo-50/60 rounded-2xl p-3.5 border border-indigo-200/80 shadow-sm">
+                    <div id="clockSvgBox" class="relative select-none" style="touch-action: none;">
+                        <svg id="analogClockSvg" viewBox="0 0 260 260" class="w-52 h-52 sm:w-56 sm:h-56 select-none drop-shadow-lg">
+                            <defs>
+                                <linearGradient id="bezelGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#6366f1"/>
+                                    <stop offset="50%" stop-color="#3b82f6"/>
+                                    <stop offset="100%" stop-color="#0ea5e9"/>
+                                </linearGradient>
+                                <radialGradient id="dialGrad" cx="50%" cy="45%" r="55%">
+                                    <stop offset="0%" stop-color="#ffffff"/>
+                                    <stop offset="80%" stop-color="#f8fafc"/>
+                                    <stop offset="100%" stop-color="#e2e8f0"/>
+                                </radialGradient>
+                                <filter id="handShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#0f172a" flood-opacity="0.25"/>
+                                </filter>
+                            </defs>
+                            <circle cx="130" cy="130" r="125" fill="url(#bezelGrad)"/>
+                            <circle cx="130" cy="130" r="117" fill="#ffffff" opacity="0.35"/>
+                            <circle cx="130" cy="130" r="113" fill="url(#dialGrad)"/>
+                            <circle cx="130" cy="130" r="64" fill="none" stroke="#e0e7ff" stroke-width="1.5" stroke-dasharray="4 4"/>
+                            ${ticksSvg}
+                            ${numbersSvg}
+                            <g id="handHour" data-hand="hour" class="clock-hand-group" filter="url(#handShadow)">
+                                <line x1="130" y1="130" x2="130" y2="72" stroke="transparent" stroke-width="24" stroke-linecap="round"/>
+                                <path d="M 126,138 L 127.5,78 L 130,71 L 132.5,78 L 134,138 Z" fill="#7c3aed"/>
+                                <circle cx="130" cy="84" r="5.5" fill="#ffffff" stroke="#7c3aed" stroke-width="2.5"/>
+                            </g>
+                            <g id="handMinute" data-hand="minute" class="clock-hand-group" filter="url(#handShadow)">
+                                <line x1="130" y1="130" x2="130" y2="42" stroke="transparent" stroke-width="22" stroke-linecap="round"/>
+                                <path d="M 127.5,142 L 128.5,48 L 130,41 L 131.5,48 L 132.5,142 Z" fill="#0284c7"/>
+                                <circle cx="130" cy="54" r="5" fill="#ffffff" stroke="#0284c7" stroke-width="2.5"/>
+                            </g>
+                            <g id="handSecond" data-hand="second" class="clock-hand-group" filter="url(#handShadow)">
+                                <line x1="130" y1="130" x2="130" y2="28" stroke="transparent" stroke-width="20" stroke-linecap="round"/>
+                                <line x1="130" y1="150" x2="130" y2="30" stroke="#e11d48" stroke-width="2.5" stroke-linecap="round"/>
+                                <circle cx="130" cy="147" r="3.5" fill="#e11d48"/>
+                                <circle cx="130" cy="36" r="4.5" fill="#ffe4e6" stroke="#e11d48" stroke-width="2"/>
+                            </g>
+                            <circle cx="130" cy="130" r="8" fill="#1e293b"/>
+                            <circle cx="130" cy="130" r="4.5" fill="#f59e0b"/>
+                            <circle cx="128.5" cy="128.5" r="1.5" fill="#fef3c7"/>
+                        </svg>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-3 text-[11px] font-bold bg-white px-3 py-1 rounded-full border border-indigo-100 shadow-xs">
+                        <span class="flex items-center gap-1 text-purple-800"><span class="w-2.5 h-2.5 rounded-full bg-purple-600 inline-block"></span>ساعت‌شمار</span>
+                        <span class="flex items-center gap-1 text-sky-800"><span class="w-2.5 h-2.5 rounded-full bg-sky-600 inline-block"></span>دقیقه‌شمار</span>
+                        <span class="flex items-center gap-1 text-rose-800"><span class="w-2.5 h-2.5 rounded-full bg-rose-600 inline-block"></span>ثانیه‌شمار</span>
+                    </div>
+
+                    <div dir="ltr" id="digitalClockDisplay" class="text-base font-black bg-slate-900 text-amber-300 px-4 py-1 rounded-xl tracking-wider shadow-inner border border-slate-700">
+                        12 : 00 : 00
+                    </div>
+
+                    <div class="grid grid-cols-4 gap-1 text-[10px] sm:text-xs font-bold w-full">
+                        <button onclick="stepClock(1)" class="btn-3d bg-rose-100 hover:bg-rose-200 text-rose-900 py-1 px-1 rounded">+۱ ثانیه</button>
+                        <button onclick="stepClock(-1)" class="btn-3d bg-rose-50 hover:bg-rose-100 text-rose-800 py-1 px-1 rounded">−۱ ثانیه</button>
+                        <button onclick="stepClock(10)" class="btn-3d bg-rose-200 hover:bg-rose-300 text-rose-950 py-1 px-1 rounded">+۱۰ ثانیه</button>
+                        <button onclick="stepClock(-10)" class="btn-3d bg-rose-50 hover:bg-rose-100 text-rose-900 py-1 px-1 rounded">−۱۰ ثانیه</button>
+
+                        <button onclick="stepClock(60)" class="btn-3d bg-sky-100 hover:bg-sky-200 text-sky-900 py-1 px-1 rounded">+۱ دقیقه</button>
+                        <button onclick="stepClock(-60)" class="btn-3d bg-sky-50 hover:bg-sky-100 text-sky-800 py-1 px-1 rounded">−۱ دقیقه</button>
+                        <button onclick="stepClock(600)" class="btn-3d bg-sky-200 hover:bg-sky-300 text-sky-950 py-1 px-1 rounded">+۱۰ دقیقه</button>
+                        <button onclick="stepClock(-600)" class="btn-3d bg-sky-50 hover:bg-sky-100 text-sky-900 py-1 px-1 rounded">−۱۰ دقیقه</button>
+
+                        <button onclick="stepClock(-3600)" class="btn-3d bg-purple-50 hover:bg-purple-100 text-purple-900 py-1 px-1 rounded col-span-2">−۱ ساعت</button>
+                        <button onclick="stepClock(3600)" class="btn-3d bg-purple-100 hover:bg-purple-200 text-purple-950 py-1 px-1 rounded col-span-2">+۱ ساعت</button>
+                    </div>
+
+                    <button onclick="setClockToTopNumber()" class="w-full text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 py-1.5 rounded-lg border border-amber-300">
+                        🔄 تنظیم روی عدد اول سوال
+                    </button>
+                </div>
+            `;
+
+            updateClockVisuals();
+            initClockDragging();
+        }
+
+        function updateClockVisuals() {
+            const total = ((manipState.clockSec % 43200) + 43200) % 43200;
+            const h = Math.floor(total / 3600);
+            const m = Math.floor((total % 3600) / 60);
+            const s = total % 60;
+
+            const sDeg = s * 6;
+            const mDeg = m * 6 + s * 0.1;
+            const hDeg = (h % 12) * 30 + m * 0.5 + (s / 120);
+
+            const handHour = document.getElementById('handHour');
+            const handMinute = document.getElementById('handMinute');
+            const handSecond = document.getElementById('handSecond');
+            const digital = document.getElementById('digitalClockDisplay');
+
+            if (handHour) handHour.setAttribute('transform', `rotate(${hDeg} 130 130)`);
+            if (handMinute) handMinute.setAttribute('transform', `rotate(${mDeg} 130 130)`);
+            if (handSecond) handSecond.setAttribute('transform', `rotate(${sDeg} 130 130)`);
+            if (digital) {
+                const displayH = h === 0 ? 12 : h;
+                digital.textContent = `${toPersianNum(displayH)} : ${toPersianNum(String(m).padStart(2, '0'))} : ${toPersianNum(String(s).padStart(2, '0'))}`;
+            }
+        }
+
+        function initClockDragging() {
+            const svgBox = document.getElementById('clockSvgBox');
+            const svg = document.getElementById('analogClockSvg');
+            if (!svgBox || !svg) return;
+
+            let activeHand = null;
+            let lastVal = null;
+
+            function getAngleFromEvent(e) {
+                const rect = svg.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const angleRad = Math.atan2(e.clientY - cy, e.clientX - cx);
+                let angleDeg = angleRad * (180 / Math.PI) + 90;
+                if (angleDeg < 0) angleDeg += 360;
+                return angleDeg;
+            }
+
+            svgBox.onpointerdown = function(e) {
+                const targetHand = e.target.closest('[data-hand]');
+                if (targetHand) {
+                    activeHand = targetHand.getAttribute('data-hand');
+                } else {
+                    const angleDeg = getAngleFromEvent(e);
+                    const total = ((manipState.clockSec % 43200) + 43200) % 43200;
+                    const sDeg = (total % 60) * 6;
+                    const mDeg = Math.floor((total % 3600) / 60) * 6;
+                    const hDeg = (Math.floor(total / 3600) % 12) * 30;
+
+                    const diff = (a, b) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b));
+                    const dS = diff(angleDeg, sDeg);
+                    const dM = diff(angleDeg, mDeg);
+                    const dH = diff(angleDeg, hDeg);
+
+                    if (dS <= dM && dS <= dH) activeHand = 'second';
+                    else if (dM <= dH) activeHand = 'minute';
+                    else activeHand = 'hour';
+                }
+
+                const curTotal = ((manipState.clockSec % 43200) + 43200) % 43200;
+                if (activeHand === 'second') lastVal = curTotal % 60;
+                else if (activeHand === 'minute') lastVal = Math.floor((curTotal % 3600) / 60);
+                else lastVal = Math.floor(curTotal / 3600) % 12;
+
+                svgBox.setPointerCapture(e.pointerId);
+                svgBox.onpointermove(e);
+            };
+
+            svgBox.onpointermove = function(e) {
+                if (!activeHand) return;
+                const angleDeg = getAngleFromEvent(e);
+
+                if (activeHand === 'second') {
+                    const newS = Math.round((angleDeg / 360) * 60) % 60;
+                    let delta = newS - lastVal;
+                    if (delta > 30) delta -= 60;
+                    if (delta < -30) delta += 60;
+                    if (delta !== 0) {
+                        manipState.clockSec = ((manipState.clockSec + delta) % 43200 + 43200) % 43200;
+                        lastVal = newS;
+                        playSound('tick');
+                        updateClockVisuals();
+                    }
+                } else if (activeHand === 'minute') {
+                    const newM = Math.round((angleDeg / 360) * 60) % 60;
+                    let delta = newM - lastVal;
+                    if (delta > 30) delta -= 60;
+                    if (delta < -30) delta += 60;
+                    if (delta !== 0) {
+                        manipState.clockSec = ((manipState.clockSec + delta * 60) % 43200 + 43200) % 43200;
+                        lastVal = newM;
+                        playSound('tick');
+                        updateClockVisuals();
+                    }
+                } else if (activeHand === 'hour') {
+                    const newH = Math.round((angleDeg / 360) * 12) % 12;
+                    let delta = newH - lastVal;
+                    if (delta > 6) delta -= 12;
+                    if (delta < -6) delta += 12;
+                    if (delta !== 0) {
+                        manipState.clockSec = ((manipState.clockSec + delta * 3600) % 43200 + 43200) % 43200;
+                        lastVal = newH;
+                        playSound('tick');
+                        updateClockVisuals();
+                    }
+                }
+            };
+
+            function endDrag(e) {
+                activeHand = null;
+                lastVal = null;
+                try { svgBox.releasePointerCapture(e.pointerId); } catch(err) {}
+            }
+
+            svgBox.onpointerup = endDrag;
+            svgBox.onpointercancel = endDrag;
+        }
+
+        function setClockToTopNumber() {
+            const q = gameState.question;
+            if (!q) return;
+            playSound('pop');
+            manipState.clockSec = ((q.u0a % 12) * 3600 + q.u1a * 60 + q.u2a) % 43200;
+            updateClockVisuals();
+        }
+
+        function stepClock(sec) {
+            playSound('pop');
+            manipState.clockSec = ((manipState.clockSec + sec) % 43200 + 43200) % 43200;
+            updateClockVisuals();
+        }
+
+        function renderRulerLab(container) {
+            const totalCm = manipState.rulerCm;
+            const km = Math.floor(totalCm / 100000);
+            const remAfterKm = totalCm % 100000;
+            const m = Math.floor(remAfterKm / 100);
+            const cm = remAfterKm % 100;
+
+            let rulerTicks = '';
+            for (let i = 0; i <= 100; i += 5) {
+                const isMajor = i % 10 === 0;
+                rulerTicks += `
+                    <div class="flex flex-col items-center" style="width: 4.5%;">
+                        <div class="w-0.5 ${isMajor ? 'h-4 bg-sky-900' : 'h-2 bg-sky-600'}"></div>
+                        ${isMajor ? `<span class="text-[8px] font-bold text-sky-950 mt-0.5">${toPersianNum(i)}</span>` : ''}
+                    </div>
+                `;
+            }
+
+            const fillPercent = Math.min(100, (cm / 100) * 100);
+
+            container.innerHTML = `
+                <div class="bg-white/95 rounded-xl p-3.5 border border-sky-200 space-y-3 text-center">
+                    <div class="flex items-center justify-between text-xs font-black text-sky-900">
+                        <span>📏 خط‌کش تبدیل واحد طول</span>
+                        <span class="bg-sky-100 px-2 py-0.5 rounded-lg">کل: ${toPersianNum(totalCm)} سانتی‌متر</span>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div class="bg-purple-50 border border-purple-200 rounded-xl p-2">
+                            <div class="text-lg font-black text-purple-900">${toPersianNum(km)}</div>
+                            <div class="text-[10px] font-bold text-purple-700">کیلومتر</div>
+                        </div>
+                        <div class="bg-sky-50 border border-sky-200 rounded-xl p-2">
+                            <div class="text-lg font-black text-sky-900">${toPersianNum(m)}</div>
+                            <div class="text-[10px] font-bold text-sky-700">متر</div>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2">
+                            <div class="text-lg font-black text-emerald-900">${toPersianNum(cm)}</div>
+                            <div class="text-[10px] font-bold text-emerald-700">سانتی‌متر</div>
+                        </div>
+                    </div>
+
+                    <div dir="ltr" class="bg-amber-100 border-2 border-amber-400 rounded-xl p-2 shadow-inner">
+                        <div class="w-full h-4 bg-white rounded-md overflow-hidden border border-amber-300 mb-1">
+                            <div class="h-full bg-gradient-to-r from-sky-400 to-emerald-500 transition-all duration-200" style="width: ${fillPercent}%;"></div>
+                        </div>
+                        <div class="flex justify-between items-start px-0.5">
+                            ${rulerTicks}
+                        </div>
+                    </div>
+
+                    <input type="range" min="0" max="500" value="${Math.min(500, totalCm)}"
+                        oninput="manipState.rulerCm = parseInt(this.value); renderManipulativeLab();"
+                        class="w-full accent-sky-600 cursor-pointer">
+
+                    <div class="grid grid-cols-4 gap-1.5 text-[11px] font-bold">
+                        <button onclick="stepRuler(1)" class="btn-3d bg-emerald-100 text-emerald-900 py-1.5 rounded-lg">+۱ سانتی‌متر</button>
+                        <button onclick="stepRuler(10)" class="btn-3d bg-emerald-200 text-emerald-950 py-1.5 rounded-lg">+۱۰ سانتی‌متر</button>
+                        <button onclick="stepRuler(50)" class="btn-3d bg-sky-100 text-sky-900 py-1.5 rounded-lg">+۵۰ سانتی‌متر</button>
+                        <button onclick="stepRuler(100)" class="btn-3d bg-purple-100 text-purple-900 py-1.5 rounded-lg">+۱ متر (۱۰۰)</button>
+                    </div>
+                    <button onclick="manipState.rulerCm = gameState.question.u2a; playSound('pop'); renderManipulativeLab();"
+                        class="w-full text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 py-1.5 rounded-lg border border-amber-300">
+                        🔄 بازنشانی خط‌کش
+                    </button>
+                </div>
+            `;
+        }
+
+        function stepRuler(deltaCm) {
+            playSound('pop');
+            manipState.rulerCm = Math.max(0, manipState.rulerCm + deltaCm);
+            renderManipulativeLab();
+        }
+
+        function renderScaleLab(container) {
+            const leftG = manipState.scaleLeft;
+            const rightG = manipState.scaleRight;
+            const diff = rightG - leftG;
+            const tiltDeg = Math.max(-18, Math.min(18, diff / 50));
+
+            const formatWeight = (g) => {
+                const kg = Math.floor(g / 1000);
+                const remG = g % 1000;
+                if (kg > 0) return `${toPersianNum(kg)} ک‌گ و ${toPersianNum(remG)} گ`;
+                return `${toPersianNum(remG)} گرم`;
+            };
+
+            const statusText = leftG === rightG
+                ? '⚖️ ترازو کاملاً متعادل است!'
+                : (leftG > rightG ? '⬅️ کفه چپ سنگین‌تر است' : '➡️ کفه راست سنگین‌تر است');
+
+            container.innerHTML = `
+                <div class="bg-white/95 rounded-xl p-3 border border-emerald-200 space-y-2 text-center">
+                    <div class="text-xs font-black text-emerald-900 bg-emerald-50 py-1 px-2 rounded-lg border border-emerald-200">
+                        ${statusText}
+                    </div>
+
+                    <svg viewBox="0 0 300 155" class="w-full max-w-[280px] mx-auto select-none">
+                        <polygon points="120,145 180,145 162,125 138,125" fill="#334155"/>
+                        <rect x="145" y="70" width="10" height="58" rx="3" fill="#475569"/>
+                        
+                        <g class="scale-beam" style="transform: rotate(${tiltDeg}deg);">
+                            <line x1="55" y1="75" x2="245" y2="75" stroke="#0f172a" stroke-width="6" stroke-linecap="round"/>
+                            <circle cx="150" cy="75" r="8" fill="#f59e0b" stroke="#78350f" stroke-width="2"/>
+                            
+                            <g style="transform: translate(55px, 75px) rotate(${-tiltDeg}deg);">
+                                <line x1="0" y1="0" x2="-22" y2="35" stroke="#64748b" stroke-width="2"/>
+                                <line x1="0" y1="0" x2="22" y2="35" stroke="#64748b" stroke-width="2"/>
+                                <path d="M -32,35 Q 0,48 32,35 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
+                                <rect x="-18" y="17" width="36" height="18" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+                                <text x="0" y="29" font-size="10" font-weight="900" fill="#78350f" text-anchor="middle">${toPersianNum(leftG)}g</text>
+                            </g>
+
+                            <g style="transform: translate(245px, 75px) rotate(${-tiltDeg}deg);">
+                                <line x1="0" y1="0" x2="-22" y2="35" stroke="#64748b" stroke-width="2"/>
+                                <line x1="0" y1="0" x2="22" y2="35" stroke="#64748b" stroke-width="2"/>
+                                <path d="M -32,35 Q 0,48 32,35 Z" fill="#10b981" stroke="#047857" stroke-width="2"/>
+                                <rect x="-18" y="17" width="36" height="18" rx="4" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
+                                <text x="0" y="29" font-size="10" font-weight="900" fill="#065f46" text-anchor="middle">${toPersianNum(rightG)}g</text>
+                            </g>
+                        </g>
+                    </svg>
+
+                    <div class="grid grid-cols-2 gap-2 text-[11px] font-bold">
+                        <div class="bg-amber-50 border border-amber-200 p-1.5 rounded-lg text-amber-950">
+                            <div>کفه چپ:</div>
+                            <div class="font-black text-xs mt-0.5">${formatWeight(leftG)}</div>
+                        </div>
+                        <div class="bg-emerald-50 border border-emerald-200 p-1.5 rounded-lg text-emerald-950">
+                            <div>کفه راست:</div>
+                            <div class="font-black text-xs mt-0.5">${formatWeight(rightG)}</div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2 text-[10px] font-bold">
+                        <div class="space-y-1">
+                            <button onclick="stepScale('left', 100)" class="w-full btn-3d bg-amber-100 hover:bg-amber-200 text-amber-950 py-1 rounded">+۱۰۰ گرم چپ</button>
+                            <button onclick="stepScale('left', 500)" class="w-full btn-3d bg-amber-200 hover:bg-amber-300 text-amber-950 py-1 rounded">+۵۰۰ گرم چپ</button>
+                            <button onclick="stepScale('left', 1000)" class="w-full btn-3d bg-amber-300 hover:bg-amber-400 text-amber-950 py-1 rounded">+۱ کیلوگرم چپ</button>
+                        </div>
+                        <div class="space-y-1">
+                            <button onclick="stepScale('right', 100)" class="w-full btn-3d bg-emerald-100 hover:bg-emerald-200 text-emerald-950 py-1 rounded">+۱۰۰ گرم راست</button>
+                            <button onclick="stepScale('right', 500)" class="w-full btn-3d bg-emerald-200 hover:bg-emerald-300 text-emerald-950 py-1 rounded">+۵۰۰ گرم راست</button>
+                            <button onclick="stepScale('right', 1000)" class="w-full btn-3d bg-emerald-300 hover:bg-emerald-400 text-emerald-950 py-1 rounded">+۱ کیلوگرم راست</button>
+                        </div>
+                    </div>
+
+                    <button onclick="manipState.scaleLeft = gameState.question.u2a; manipState.scaleRight = gameState.question.u2b; playSound('pop'); renderManipulativeLab();"
+                        class="w-full text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 py-1.5 rounded-lg border border-slate-300">
+                        🔄 بازنشانی وزنه‌ها
+                    </button>
+                </div>
+            `;
+        }
+
+        function stepScale(side, grams) {
+            playSound('pop');
+            if (side === 'left') manipState.scaleLeft += grams;
+            else manipState.scaleRight += grams;
+            renderManipulativeLab();
+        }
+
+        function checkAnswer() {
+            if (gameState.answeredCurrent) return;
+            const q = gameState.question;
+            const cfg = TOPIC_CONFIG[gameState.topic];
+            const r0 = document.getElementById('ansHour').value.trim();
+            const r1 = document.getElementById('ansMin').value.trim();
+            const r2 = document.getElementById('ansSec').value.trim();
+
+            if (r0 === '' || r1 === '' || r2 === '') {
+                playSound('wrong');
+                showFeedback('warning', 'کادرها را پر کن', 'لطفاً پاسخ هر سه ستون را وارد کن.');
+                return;
+            }
+
+            const u0 = parseInt(r0);
+            const u1 = parseInt(r1);
+            const u2 = parseInt(r2);
+
+            const userTotal = (u0 * cfg.base0to1 + u1) * cfg.base1to2 + u2;
+            const ansTotal = (q.ans0 * cfg.base0to1 + q.ans1) * cfg.base1to2 + q.ans2;
+
+            if (userTotal === ansTotal && (u1 >= cfg.base0to1 || u2 >= cfg.base1to2)) {
+                playSound('wrong');
+                showFeedback('warning', 'خیلی نزدیک شدی! تبدیل واحد یادت نرود ⬅️',
+                    `محاسبه‌ات درست است، اما در ستون «${cfg.units[1]}» یا «${cfg.units[2]}» عدد از حد مجاز بزرگ‌تر است. از دکمه «تبدیل واحد» زیر کادرها استفاده کن!`);
+                return;
+            }
+
+            const isOk = u0 === q.ans0 && u1 === q.ans1 && u2 === q.ans2;
+
+            if (isOk) {
+                gameState.answeredCurrent = true;
+                gameState.correctCount++;
+                gameState.combo++;
+                if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
+                const earned = gameState.usedHintCurrent ? 10 : 15;
+                gameState.score += earned;
+                updateStatsUI();
+                playSound('correct');
+                if (typeof confetti === 'function') confetti({ particleCount: 55, spread: 65, origin: { y: 0.7 } });
+
+                ['ansHour', 'ansMin', 'ansSec'].forEach(id => {
+                    const el = document.getElementById(id);
+                    el.disabled = true;
+                    el.classList.add('border-emerald-500', 'bg-emerald-50');
+                });
+                document.getElementById('checkBtn').classList.add('hidden');
+                document.getElementById('hintBtn').classList.add('hidden');
+                document.getElementById('nextBtn').classList.remove('hidden');
+                showFeedback('success', `آفرین! کاملاً درست بود (+${toPersianNum(earned)} امتیاز) 🎉`, 'عالی عمل کردی! روی دکمه «سوال بعدی» بزن.');
+            } else {
+                gameState.combo = 0;
+                updateStatsUI();
+                playSound('wrong');
+                showFeedback('error', 'پاسخ نادرست است! دوباره تلاش کن', 'ستون‌ها را از سمت راست به چپ با دقت دوباره حساب کن.');
+            }
+        }
+
+        function showSmartHint() {
+            playSound('pop');
+            gameState.usedHintCurrent = true;
+            const q = gameState.question;
+            const cfg = TOPIC_CONFIG[gameState.topic];
+
+            if (q.op === '+') {
+                const sum2 = q.u2a + q.u2b;
+                const sum1 = q.u1a + q.u1b;
+                if (sum2 >= cfg.base1to2 || sum1 >= cfg.base0to1) {
+                    showFeedback('info', '💡 راهنمای هوشمند (جمع با تبدیل واحد):',
+                        `ابتدا هر ستون را جداگانه جمع بزن (${toPersianNum(q.u2a)} + ${toPersianNum(q.u2b)} = ${toPersianNum(sum2)}). چون حاصل از ${toPersianNum(cfg.base1to2)} بیشتر یا مساوی است، دکمه «تبدیل واحد» را بزن تا به ستون سمت چپ منتقل شود.`);
+                } else {
+                    showFeedback('info', '💡 راهنمای هوشمند (جمع ساده):',
+                        `هر ستون را از راست به چپ با هم جمع کن و در کادر خودش بنویس. در این سوال نیازی به تبدیل واحد نیست.`);
+                }
+            } else {
+                if (gameState.workTop2 < q.u2b) {
+                    showFeedback('info', '💡 راهنمای هوشمند (قرض گرفتن):',
+                        `در ستون سمت راست، عدد بالا (${toPersianNum(gameState.workTop2)}) از عدد پایین (${toPersianNum(q.u2b)}) کوچک‌تر است! روی دکمه «قرض به راست ⤵️» بزن تا ${toPersianNum(cfg.base1to2)} ${cfg.units[2]} از ستون وسط قرض بگیری.`);
+                } else if (gameState.workTop1 < q.u1b) {
+                    showFeedback('info', '💡 راهنمای هوشمند (قرض گرفتن):',
+                        `در ستون وسط، عدد بالا (${toPersianNum(gameState.workTop1)}) از عدد پایین (${toPersianNum(q.u1b)}) کوچک‌تر است! روی دکمه «قرض به وسط ⤵️» بزن تا ${toPersianNum(cfg.base0to1)} ${cfg.units[1]} از ستون چپ قرض بگیری.`);
+                } else {
+                    showFeedback('info', '💡 راهنمای هوشمند (آماده تفریق):',
+                        `اکنون همه اعداد بالا از اعداد پایین بزرگ‌تر یا مساوی هستند. از سمت راست تفریق را انجام بده و پاسخ را بنویس!`);
+                }
+            }
+        }
+
+        function nextQuestion() {
+            playSound('pop');
+            if (gameState.currentQIndex >= gameState.totalQuestions) showFinalResults();
+            else loadNewQuestion();
+        }
+
+        function showFinalResults() {
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('resultScreen').classList.remove('hidden');
+            document.getElementById('finalScore').textContent = toPersianNum(gameState.score);
+            document.getElementById('finalCorrect').textContent = `${toPersianNum(gameState.correctCount)} از ۱۰`;
+            document.getElementById('finalMaxCombo').textContent = toPersianNum(gameState.maxCombo);
+
+            const starsEl = document.getElementById('starsContainer');
+            if (gameState.correctCount >= 8) starsEl.textContent = '⭐⭐⭐';
+            else if (gameState.correctCount >= 5) starsEl.textContent = '⭐⭐';
+            else starsEl.textContent = '⭐';
+
+            if (typeof confetti === 'function') confetti({ particleCount: 110, spread: 85, origin: { y: 0.5 } });
+        }
+
+        function updateStatsUI() {
+            document.getElementById('scoreDisplay').textContent = toPersianNum(gameState.score);
+            const cb = document.getElementById('comboBadge');
+            if (gameState.combo >= 2) {
+                cb.classList.remove('hidden');
+                document.getElementById('comboText').textContent = `${toPersianNum(gameState.combo)} پاسخ پیاپی`;
+            } else {
+                cb.classList.add('hidden');
+            }
+        }
+
+        function showFeedback(type, title, text) {
+            const box = document.getElementById('feedbackBox');
+            const icon = document.getElementById('feedbackIcon');
+            let styleClass = 'bg-sky-50 border-sky-300 text-sky-950';
+            icon.textContent = '💡';
+
+            if (type === 'success') {
+                styleClass = 'bg-emerald-50 border-emerald-300 text-emerald-950';
+                icon.textContent = '🎉';
+            } else if (type === 'error') {
+                styleClass = 'bg-rose-50 border-rose-300 text-rose-950';
+                icon.textContent = '❌';
+            } else if (type === 'warning') {
+                styleClass = 'bg-amber-50 border-amber-300 text-amber-950';
+                icon.textContent = '⚠️';
+            }
+
+            box.className = `mt-2.5 p-2.5 rounded-xl border-2 text-xs leading-relaxed animate-pop ${styleClass}`;
+            document.getElementById('feedbackTitle').textContent = title;
+            document.getElementById('feedbackText').textContent = text;
+            box.classList.remove('hidden');
+        }
+
+        function toggleTutorial(show) {
+            playSound('pop');
+            document.getElementById('tutorialModal').classList.toggle('hidden', !show);
+        }
+    </script>
+</body>
+</html>

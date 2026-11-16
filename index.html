@@ -58,6 +58,12 @@
         .scale-pan-group {
             transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
+        .tape-measure-box {
+            cursor: grab;
+        }
+        .tape-measure-box:active {
+            cursor: grabbing;
+        }
     </style>
 </head>
 <body class="text-slate-800 flex flex-col items-center p-2 sm:p-4">
@@ -106,7 +112,7 @@
                 <button id="topicBtn_length" onclick="selectTopic('length')" class="cursor-pointer rounded-2xl p-4 border-2 border-slate-200 bg-white hover:bg-sky-50 transition-all text-center opacity-85 hover:opacity-100">
                     <div class="text-4xl mb-1">📏</div>
                     <div class="font-black text-lg text-sky-950">اعداد مرکب طول</div>
-                    <div class="text-xs font-bold text-sky-700 mt-1">کیلومتر • متر • سانتی‌متر</div>
+                    <div class="text-xs font-bold text-sky-700 mt-1">متر • سانتی‌متر • میلی‌متر</div>
                 </button>
 
                 <button id="topicBtn_mass" onclick="selectTopic('mass')" class="cursor-pointer rounded-2xl p-4 border-2 border-slate-200 bg-white hover:bg-emerald-50 transition-all text-center opacity-85 hover:opacity-100">
@@ -347,8 +353,8 @@
                     <p>هر <strong>۶۰ ثانیه</strong> = ۱ دقیقه | هر <strong>۶۰ دقیقه</strong> = ۱ ساعت</p>
                 </div>
                 <div class="bg-sky-50 p-3.5 rounded-2xl border border-sky-200">
-                    <div class="font-black text-sky-900 mb-1">📏 واحدهای طول (مبنای ۱۰۰ و ۱۰۰۰):</div>
-                    <p>هر <strong>۱۰۰ سانتی‌متر</strong> = ۱ متر | هر <strong>۱۰۰۰ متر</strong> = ۱ کیلومتر</p>
+                    <div class="font-black text-sky-900 mb-1">📏 واحدهای طول (مبنای ۱۰۰ و ۱۰):</div>
+                    <p>هر <strong>۱۰ میلی‌متر</strong> = ۱ سانتی‌متر | هر <strong>۱۰۰ سانتی‌متر</strong> = ۱ متر</p>
                 </div>
                 <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200">
                     <div class="font-black text-emerald-900 mb-1">⚖️ واحدهای جرم (مبنای ۱۰۰۰):</div>
@@ -414,8 +420,8 @@
             },
             length: {
                 id: 'length', name: 'طول', badge: '📏 طول', icon: '📏',
-                units: ['کیلومتر', 'متر', 'سانتی‌متر'], base0to1: 1000, base1to2: 100,
-                ruleText: '۱ کیلومتر = ۱۰۰۰ متر | ۱ متر = ۱۰۰ سانتی‌متر'
+                units: ['متر', 'سانتی‌متر', 'میلی‌متر'], base0to1: 100, base1to2: 10,
+                ruleText: '۱ متر = ۱۰۰ سانتی‌متر | ۱ سانتی‌متر = ۱۰ میلی‌متر'
             },
             mass: {
                 id: 'mass', name: 'جرم', badge: '⚖️ جرم', icon: '⚖️',
@@ -548,9 +554,9 @@
                     }
                 } else if (topic === 'length') {
                     if (op === '+') {
-                        story = `یک گروه کوهنوردی روز اول ${toPersianNum(u0a)} کیلومتر و ${toPersianNum(u1a)} متر و ${toPersianNum(u2a)} سانتی‌متر و روز دوم ${toPersianNum(u0b)} کیلومتر و ${toPersianNum(u1b)} متر و ${toPersianNum(u2b)} سانتی‌متر پیاده‌روی کردند. مسافت کل طی شده چقدر است؟`;
+                        story = `یک نجار برای ساخت قاب عکس ابتدا ${toPersianNum(u0a)} متر و ${toPersianNum(u1a)} سانتی‌متر و ${toPersianNum(u2a)} میلی‌متر چوب برید و سپس ${toPersianNum(u0b)} متر و ${toPersianNum(u1b)} سانتی‌متر و ${toPersianNum(u2b)} میلی‌متر دیگر به آن اضافه کرد. طول کل چوب چقدر است؟`;
                     } else {
-                        story = `طول یک طناب کوهنوردی ${toPersianNum(u0a)} کیلومتر و ${toPersianNum(u1a)} متر و ${toPersianNum(u2a)} سانتی‌متر است. اگر ${toPersianNum(u0b)} کیلومتر و ${toPersianNum(u1b)} متر و ${toPersianNum(u2b)} سانتی‌متر از آن را ببریم، چه مقدار طناب باقی می‌ماند؟`;
+                        story = `طول یک نوار پارچه‌ای ${toPersianNum(u0a)} متر و ${toPersianNum(u1a)} سانتی‌متر و ${toPersianNum(u2a)} میلی‌متر است. اگر ${toPersianNum(u0b)} متر و ${toPersianNum(u1b)} سانتی‌متر و ${toPersianNum(u2b)} میلی‌متر از آن را ببریم، چه مقدار نوار باقی می‌ماند؟`;
                     }
                 } else {
                     if (op === '+') {
@@ -751,7 +757,7 @@
             const q = gameState.question;
             if (!q) return;
             if (gameState.topic === 'time') manipState.clockSec = ((q.u0a % 12) * 3600 + q.u1a * 60 + q.u2a) % 43200;
-            else if (gameState.topic === 'length') manipState.rulerCm = q.u2a;
+            else if (gameState.topic === 'length') manipState.rulerCm = q.u0a * 1000 + q.u1a * 10 + q.u2a;
             else {
                 manipState.scaleLeft = q.u2a;
                 manipState.scaleRight = q.u2b;
@@ -1011,78 +1017,183 @@
         }
 
         function renderRulerLab(container) {
-            const totalCm = manipState.rulerCm;
-            const km = Math.floor(totalCm / 100000);
-            const remAfterKm = totalCm % 100000;
-            const m = Math.floor(remAfterKm / 100);
-            const cm = remAfterKm % 100;
-
-            let rulerTicks = '';
-            for (let i = 0; i <= 100; i += 5) {
-                const isMajor = i % 10 === 0;
-                rulerTicks += `
-                    <div class="flex flex-col items-center" style="width: 4.5%;">
-                        <div class="w-0.5 ${isMajor ? 'h-4 bg-sky-900' : 'h-2 bg-sky-600'}"></div>
-                        ${isMajor ? `<span class="text-[8px] font-bold text-sky-950 mt-0.5">${toPersianNum(i)}</span>` : ''}
-                    </div>
-                `;
-            }
-
-            const fillPercent = Math.min(100, (cm / 100) * 100);
-
             container.innerHTML = `
-                <div class="bg-white/95 rounded-xl p-3.5 border border-sky-200 space-y-3 text-center">
+                <div class="bg-white/95 rounded-2xl p-3.5 border border-sky-200 space-y-3 text-center">
                     <div class="flex items-center justify-between text-xs font-black text-sky-900">
-                        <span>📏 خط‌کش تبدیل واحد طول</span>
-                        <span class="bg-sky-100 px-2 py-0.5 rounded-lg">کل: ${toPersianNum(totalCm)} سانتی‌متر</span>
+                        <span>📏 متر نواری مندرج (بکش به چپ و راست)</span>
+                        <span id="tapeTotalMmBadge" class="bg-sky-100 text-sky-900 px-2.5 py-0.5 rounded-lg border border-sky-200 font-bold" dir="rtl">
+                            ۰ میلی‌متر
+                        </span>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2 text-center">
+                    <div class="grid grid-cols-3 gap-2 text-center" dir="rtl">
                         <div class="bg-purple-50 border border-purple-200 rounded-xl p-2">
-                            <div class="text-lg font-black text-purple-900">${toPersianNum(km)}</div>
-                            <div class="text-[10px] font-bold text-purple-700">کیلومتر</div>
+                            <div id="tapeValM" class="text-lg font-black text-purple-900">۰</div>
+                            <div class="text-[10px] font-bold text-purple-700">متر</div>
                         </div>
                         <div class="bg-sky-50 border border-sky-200 rounded-xl p-2">
-                            <div class="text-lg font-black text-sky-900">${toPersianNum(m)}</div>
-                            <div class="text-[10px] font-bold text-sky-700">متر</div>
+                            <div id="tapeValCm" class="text-lg font-black text-sky-900">۰</div>
+                            <div class="text-[10px] font-bold text-sky-700">سانتی‌متر</div>
                         </div>
                         <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2">
-                            <div class="text-lg font-black text-emerald-900">${toPersianNum(cm)}</div>
-                            <div class="text-[10px] font-bold text-emerald-700">سانتی‌متر</div>
+                            <div id="tapeValMm" class="text-lg font-black text-emerald-900">۰</div>
+                            <div class="text-[10px] font-bold text-emerald-700">میلی‌متر</div>
                         </div>
                     </div>
 
-                    <div dir="ltr" class="bg-amber-100 border-2 border-amber-400 rounded-xl p-2 shadow-inner">
-                        <div class="w-full h-4 bg-white rounded-md overflow-hidden border border-amber-300 mb-1">
-                            <div class="h-full bg-gradient-to-r from-sky-400 to-emerald-500 transition-all duration-200" style="width: ${fillPercent}%;"></div>
+                    <!-- محفظه متر نواری مندرج با مثلث نشانگر بالا -->
+                    <div id="tapeMeasureBox" dir="ltr" class="tape-measure-box relative w-full select-none rounded-2xl bg-slate-800 p-2 pt-8 shadow-inner border-2 border-slate-700 overflow-hidden" style="touch-action: none;">
+                        <!-- علامت مثلث نشانگر ثابت در بالا که عدد زیر خود را روی متر می‌خواند -->
+                        <div class="pointer-events-none absolute top-1 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
+                            <div id="tapePointerReadout" class="bg-rose-600 text-white text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap border border-rose-300" dir="rtl">
+                                ۰ متر و ۰ سانتی‌متر و ۰ میلی‌متر
+                            </div>
+                            <svg width="22" height="13" viewBox="0 0 22 13" class="drop-shadow -mt-0.5">
+                                <polygon points="0,0 22,0 11,13" fill="#e11d48"/>
+                            </svg>
                         </div>
-                        <div class="flex justify-between items-start px-0.5">
-                            ${rulerTicks}
+
+                        <!-- خط راهنمای عمودی زیر مثلث -->
+                        <div class="pointer-events-none absolute top-9 bottom-2 left-1/2 -translate-x-1/2 w-0.5 bg-rose-500/90 z-20"></div>
+
+                        <!-- نوار زرد متر مندرج -->
+                        <div class="relative h-20 w-full rounded-xl bg-gradient-to-b from-amber-300 via-yellow-300 to-amber-400 border-2 border-amber-500 overflow-hidden shadow-md">
+                            <svg id="tapeMeasureSvg" viewBox="0 0 360 80" class="w-full h-full block">
+                                <g id="tapeTicksLayer"></g>
+                            </svg>
+                        </div>
+                        <div class="text-[10px] text-slate-300 font-bold mt-1.5" dir="rtl">
+                            👆 نوار متر را به چپ و راست بکشید تا مقدار زیر مثلث تغییر کند
                         </div>
                     </div>
 
-                    <input type="range" min="0" max="500" value="${Math.min(500, totalCm)}"
-                        oninput="manipState.rulerCm = parseInt(this.value); renderManipulativeLab();"
-                        class="w-full accent-sky-600 cursor-pointer">
-
-                    <div class="grid grid-cols-4 gap-1.5 text-[11px] font-bold">
-                        <button onclick="stepRuler(1)" class="btn-3d bg-emerald-100 text-emerald-900 py-1.5 rounded-lg">+۱ سانتی‌متر</button>
-                        <button onclick="stepRuler(10)" class="btn-3d bg-emerald-200 text-emerald-950 py-1.5 rounded-lg">+۱۰ سانتی‌متر</button>
-                        <button onclick="stepRuler(50)" class="btn-3d bg-sky-100 text-sky-900 py-1.5 rounded-lg">+۵۰ سانتی‌متر</button>
-                        <button onclick="stepRuler(100)" class="btn-3d bg-purple-100 text-purple-900 py-1.5 rounded-lg">+۱ متر (۱۰۰)</button>
+                    <div class="grid grid-cols-4 gap-1.5 text-[11px] font-bold" dir="rtl">
+                        <button onclick="stepRuler(-1)" class="btn-3d bg-rose-100 hover:bg-rose-200 text-rose-900 py-1.5 rounded-lg">−۱ م‌م</button>
+                        <button onclick="stepRuler(1)" class="btn-3d bg-emerald-100 hover:bg-emerald-200 text-emerald-900 py-1.5 rounded-lg">+۱ م‌م</button>
+                        <button onclick="stepRuler(-10)" class="btn-3d bg-sky-100 hover:bg-sky-200 text-sky-900 py-1.5 rounded-lg">−۱ س‌م</button>
+                        <button onclick="stepRuler(10)" class="btn-3d bg-sky-200 hover:bg-sky-300 text-sky-950 py-1.5 rounded-lg">+۱ س‌م</button>
                     </div>
-                    <button onclick="manipState.rulerCm = gameState.question.u2a; playSound('pop'); renderManipulativeLab();"
-                        class="w-full text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 py-1.5 rounded-lg border border-amber-300">
-                        🔄 بازنشانی خط‌کش
+                    <div class="grid grid-cols-2 gap-1.5 text-[11px] font-bold" dir="rtl">
+                        <button onclick="stepRuler(-100)" class="btn-3d bg-purple-100 hover:bg-purple-200 text-purple-900 py-1.5 rounded-lg">−۱۰ سانتی‌متر (۱۰۰ م‌م)</button>
+                        <button onclick="stepRuler(100)" class="btn-3d bg-purple-200 hover:bg-purple-300 text-purple-950 py-1.5 rounded-lg">+۱۰ سانتی‌متر (۱۰۰ م‌م)</button>
+                    </div>
+
+                    <button onclick="manipState.rulerCm = gameState.question.u0a * 1000 + gameState.question.u1a * 10 + gameState.question.u2a; playSound('pop'); updateTapeVisuals();"
+                        class="w-full text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 py-1.5 rounded-lg border border-amber-300" dir="rtl">
+                        🔄 تنظیم متر روی عدد اول سوال
                     </button>
                 </div>
             `;
+
+            updateTapeVisuals();
+            initTapeDragging();
         }
 
-        function stepRuler(deltaCm) {
+        function updateTapeVisuals() {
+            const totalMm = Math.max(0, Math.round(manipState.rulerCm));
+            const m = Math.floor(totalMm / 1000);
+            const remAfterM = totalMm % 1000;
+            const cm = Math.floor(remAfterM / 10);
+            const mm = remAfterM % 10;
+
+            const elM = document.getElementById('tapeValM');
+            const elCm = document.getElementById('tapeValCm');
+            const elMm = document.getElementById('tapeValMm');
+            const elBadge = document.getElementById('tapeTotalMmBadge');
+            const elPointer = document.getElementById('tapePointerReadout');
+            const ticksLayer = document.getElementById('tapeTicksLayer');
+
+            if (elM) elM.textContent = toPersianNum(m);
+            if (elCm) elCm.textContent = toPersianNum(cm);
+            if (elMm) elMm.textContent = toPersianNum(mm);
+            if (elBadge) elBadge.textContent = `کل: ${toPersianNum(totalMm)} میلی‌متر`;
+            if (elPointer) elPointer.textContent = `${toPersianNum(m)} متر و ${toPersianNum(cm)} سانتی‌متر و ${toPersianNum(mm)} میلی‌متر`;
+
+            if (!ticksLayer) return;
+
+            const pxPerMm = 7;
+            const centerX = 180;
+            const visibleHalfMm = Math.ceil(centerX / pxPerMm) + 3;
+            const startMm = Math.max(0, totalMm - visibleHalfMm);
+            const endMm = totalMm + visibleHalfMm;
+
+            let svgContent = '';
+            for (let t = startMm; t <= endMm; t++) {
+                const x = centerX + (t - totalMm) * pxPerMm;
+                const isSelected = t === totalMm;
+                if (t % 100 === 0) {
+                    const localM = Math.floor(t / 1000);
+                    const localCm = (t % 1000) / 10;
+                    svgContent += `
+                        <line x1="${x}" y1="0" x2="${x}" y2="42" stroke="${isSelected ? '#e11d48' : '#7c2d12'}" stroke-width="2.5"/>
+                        <rect x="${x - 20}" y="45" width="40" height="16" rx="4" fill="${isSelected ? '#e11d48' : '#7c2d12'}"/>
+                        <text x="${x}" y="56" font-size="9" font-weight="900" fill="#fef3c7" text-anchor="middle">${toPersianNum(localM)}م ${toPersianNum(localCm)}س</text>
+                    `;
+                } else if (t % 10 === 0) {
+                    const localCm = Math.floor((t % 1000) / 10);
+                    svgContent += `
+                        <line x1="${x}" y1="0" x2="${x}" y2="34" stroke="${isSelected ? '#e11d48' : '#1e293b'}" stroke-width="2"/>
+                        <text x="${x}" y="48" font-size="11" font-weight="900" fill="${isSelected ? '#e11d48' : '#0f172a'}" text-anchor="middle">${toPersianNum(localCm)}</text>
+                    `;
+                } else if (t % 5 === 0) {
+                    svgContent += `<line x1="${x}" y1="0" x2="${x}" y2="23" stroke="${isSelected ? '#e11d48' : '#334155'}" stroke-width="1.5"/>`;
+                } else {
+                    svgContent += `<line x1="${x}" y1="0" x2="${x}" y2="14" stroke="${isSelected ? '#e11d48' : '#475569'}" stroke-width="1.1"/>`;
+                }
+            }
+
+            ticksLayer.innerHTML = svgContent;
+        }
+
+        function initTapeDragging() {
+            const box = document.getElementById('tapeMeasureBox');
+            const svg = document.getElementById('tapeMeasureSvg');
+            if (!box || !svg) return;
+
+            let isDragging = false;
+            let startClientX = 0;
+            let startMm = 0;
+            let lastTickMm = Math.round(manipState.rulerCm);
+
+            box.onpointerdown = function(e) {
+                isDragging = true;
+                startClientX = e.clientX;
+                startMm = manipState.rulerCm;
+                lastTickMm = Math.round(manipState.rulerCm);
+                box.setPointerCapture(e.pointerId);
+            };
+
+            box.onpointermove = function(e) {
+                if (!isDragging) return;
+                const rect = svg.getBoundingClientRect();
+                const scaleFactor = 360 / (rect.width || 360);
+                const dxSvg = (e.clientX - startClientX) * scaleFactor;
+                const pxPerMm = 7;
+                const newMm = Math.max(0, Math.round(startMm - dxSvg / pxPerMm));
+
+                if (newMm !== manipState.rulerCm) {
+                    manipState.rulerCm = newMm;
+                    if (Math.abs(newMm - lastTickMm) >= 1) {
+                        playSound('tick');
+                        lastTickMm = newMm;
+                    }
+                    updateTapeVisuals();
+                }
+            };
+
+            function stopDrag(e) {
+                isDragging = false;
+                try { box.releasePointerCapture(e.pointerId); } catch(err) {}
+            }
+
+            box.onpointerup = stopDrag;
+            box.onpointercancel = stopDrag;
+        }
+
+        function stepRuler(deltaMm) {
             playSound('pop');
-            manipState.rulerCm = Math.max(0, manipState.rulerCm + deltaCm);
-            renderManipulativeLab();
+            manipState.rulerCm = Math.max(0, manipState.rulerCm + deltaMm);
+            updateTapeVisuals();
         }
 
         function renderScaleLab(container) {

@@ -51,13 +51,6 @@
         .clock-hand-group:active {
             cursor: grabbing;
         }
-        .scale-beam {
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform-origin: 150px 75px;
-        }
-        .scale-pan-group {
-            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
         .tape-measure-box {
             cursor: grab;
         }
@@ -118,7 +111,7 @@
                 <button id="topicBtn_mass" onclick="selectTopic('mass')" class="cursor-pointer rounded-2xl p-4 border-2 border-slate-200 bg-white hover:bg-emerald-50 transition-all text-center opacity-85 hover:opacity-100">
                     <div class="text-4xl mb-1">⚖️</div>
                     <div class="font-black text-lg text-emerald-950">اعداد مرکب جرم</div>
-                    <div class="text-xs font-bold text-emerald-700 mt-1">تُن • کیلوگرم • گرم</div>
+                    <div class="text-xs font-bold text-emerald-700 mt-1">کیلوگرم • گرم</div>
                 </button>
             </div>
 
@@ -225,7 +218,7 @@
                 <div id="calcColumnWrapper" class="lg:col-span-6 bg-slate-50/70 rounded-2xl p-3 sm:p-4 border-2 border-sky-200">
                     <div class="overflow-x-auto">
                         <div dir="ltr" class="min-w-[270px] max-w-md mx-auto bg-slate-50 rounded-xl p-2.5 sm:p-3.5 border border-slate-200 shadow-inner">
-                            <div class="grid grid-cols-10 gap-1.5 text-center font-black text-xs sm:text-sm mb-1.5">
+                            <div id="gridHeaderRow" class="grid grid-cols-10 gap-1.5 text-center font-black text-xs sm:text-sm mb-1.5">
                                 <div class="col-span-1"></div>
                                 <div id="hdrUnit0" class="col-span-3 bg-purple-100 text-purple-900 py-1 rounded-lg border border-purple-200">ساعت</div>
                                 <div id="hdrUnit1" class="col-span-3 bg-sky-100 text-sky-900 py-1 rounded-lg border border-sky-200">دقیقه</div>
@@ -235,19 +228,19 @@
                             <!-- دکمه‌های کمکی قرض گرفتن و پس دادن -->
                             <div id="helperButtonsRow" class="grid grid-cols-10 gap-1.5 text-center mb-1">
                                 <div class="col-span-1"></div>
-                                <div class="col-span-3 flex flex-col items-center gap-1">
+                                <div id="colHelper0" class="col-span-3 flex flex-col items-center gap-1">
                                     <button id="borrowHourBtn" onclick="borrowFromUnit0()" class="hidden text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 px-1.5 py-0.5 rounded shadow">قرض به وسط ⤵️</button>
                                     <button id="unborrowHourBtn" onclick="unborrowToUnit0()" class="hidden text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300 px-1.5 py-0.5 rounded">⤴️ پس دادن</button>
                                 </div>
-                                <div class="col-span-3 flex flex-col items-center gap-1">
+                                <div id="colHelper1" class="col-span-3 flex flex-col items-center gap-1">
                                     <button id="borrowMinBtn" onclick="borrowFromUnit1()" class="hidden text-[10px] font-bold bg-amber-400 hover:bg-amber-500 text-amber-950 px-1.5 py-0.5 rounded shadow">قرض به راست ⤵️</button>
                                     <button id="unborrowMinBtn" onclick="unborrowToUnit1()" class="hidden text-[10px] font-bold bg-rose-100 text-rose-800 border border-rose-300 px-1.5 py-0.5 rounded">⤴️ پس دادن</button>
                                 </div>
-                                <div class="col-span-3"></div>
+                                <div id="colHelper2" class="col-span-3"></div>
                             </div>
 
                             <!-- ردیف عدد اول -->
-                            <div class="grid grid-cols-10 gap-1.5 items-center text-center text-lg sm:text-2xl font-black text-slate-800 py-0.5">
+                            <div id="topNumberRow" class="grid grid-cols-10 gap-1.5 items-center text-center text-lg sm:text-2xl font-black text-slate-800 py-0.5">
                                 <div class="col-span-1"></div>
                                 <div id="topHour" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm transition-colors">0</div>
                                 <div id="topMin" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm transition-colors">0</div>
@@ -255,7 +248,7 @@
                             </div>
 
                             <!-- ردیف عدد دوم -->
-                            <div class="grid grid-cols-10 gap-1.5 items-center text-center text-lg sm:text-2xl font-black text-slate-800 py-0.5">
+                            <div id="botNumberRow" class="grid grid-cols-10 gap-1.5 items-center text-center text-lg sm:text-2xl font-black text-slate-800 py-0.5">
                                 <div id="operatorSymbol" class="col-span-1 text-2xl font-black text-rose-500">+</div>
                                 <div id="botHour" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm">0</div>
                                 <div id="botMin" class="col-span-3 bg-white py-1.5 rounded-lg border border-slate-200 shadow-sm">0</div>
@@ -265,15 +258,15 @@
                             <div class="border-b-4 border-slate-700 my-1.5 rounded-full"></div>
 
                             <!-- ردیف پاسخ دانش‌آموز -->
-                            <div class="grid grid-cols-10 gap-1.5 items-center text-center pt-0.5">
+                            <div id="ansNumberRow" class="grid grid-cols-10 gap-1.5 items-center text-center pt-0.5">
                                 <div class="col-span-1 text-lg font-black text-slate-400">=</div>
-                                <div class="col-span-3">
+                                <div id="colAns0" class="col-span-3">
                                     <input type="number" id="ansHour" placeholder="؟" class="w-full text-center text-lg sm:text-2xl font-black text-purple-900 bg-purple-50 border-2 border-purple-300 rounded-lg py-1.5 focus:outline-none focus:ring-2 focus:ring-purple-400">
                                 </div>
-                                <div class="col-span-3">
+                                <div id="colAns1" class="col-span-3">
                                     <input type="number" id="ansMin" placeholder="؟" class="w-full text-center text-lg sm:text-2xl font-black text-sky-900 bg-sky-50 border-2 border-sky-300 rounded-lg py-1.5 focus:outline-none focus:ring-2 focus:ring-sky-400">
                                 </div>
-                                <div class="col-span-3">
+                                <div id="colAns2" class="col-span-3">
                                     <input type="number" id="ansSec" placeholder="؟" class="w-full text-center text-lg sm:text-2xl font-black text-emerald-900 bg-emerald-50 border-2 border-emerald-300 rounded-lg py-1.5 focus:outline-none focus:ring-2 focus:ring-emerald-400">
                                 </div>
                             </div>
@@ -281,11 +274,11 @@
                             <!-- دکمه‌های تبدیل واحد در جمع -->
                             <div id="carryButtonsRow" class="grid grid-cols-10 gap-1.5 text-center mt-1.5">
                                 <div class="col-span-1"></div>
-                                <div class="col-span-3"></div>
-                                <div class="col-span-3 flex justify-center">
+                                <div id="colCarry0" class="col-span-3"></div>
+                                <div id="colCarry1" class="col-span-3 flex justify-center">
                                     <button id="carryMinBtn" onclick="carryUnit1ToUnit0()" class="hidden text-[10px] font-bold bg-indigo-500 hover:bg-indigo-600 text-white px-1.5 py-0.5 rounded shadow">⬅️ تبدیل واحد</button>
                                 </div>
-                                <div class="col-span-3 flex justify-center">
+                                <div id="colCarry2" class="col-span-3 flex justify-center">
                                     <button id="carrySecBtn" onclick="carryUnit2ToUnit1()" class="hidden text-[10px] font-bold bg-indigo-500 hover:bg-indigo-600 text-white px-1.5 py-0.5 rounded shadow">⬅️ تبدیل واحد</button>
                                 </div>
                             </div>
@@ -358,7 +351,7 @@
                 </div>
                 <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200">
                     <div class="font-black text-emerald-900 mb-1">⚖️ واحدهای جرم (مبنای ۱۰۰۰):</div>
-                    <p>هر <strong>۱۰۰۰ گرم</strong> = ۱ کیلوگرم | هر <strong>۱۰۰۰ کیلوگرم</strong> = ۱ تُن</p>
+                    <p>هر <strong>۱۰۰۰ گرم</strong> = ۱ کیلوگرم</p>
                 </div>
                 <div class="bg-indigo-50 p-3.5 rounded-2xl border border-indigo-200 text-xs">
                     <strong>نکته کلیدی:</strong> در جمع اگر حاصل یک ستون از مبنا بیشتر شد از دکمه <strong>«تبدیل واحد»</strong> استفاده کن. در تفریق اگر عدد بالا کوچک‌تر از پایین بود از ستون کناری <strong>«قرض»</strong> بگیر!
@@ -425,8 +418,9 @@
             },
             mass: {
                 id: 'mass', name: 'جرم', badge: '⚖️ جرم', icon: '⚖️',
-                units: ['تُن', 'کیلوگرم', 'گرم'], base0to1: 1000, base1to2: 1000,
-                ruleText: '۱ تُن = ۱۰۰۰ کیلوگرم | ۱ کیلوگرم = ۱۰۰۰ گرم'
+                twoCols: true,
+                units: ['', 'کیلوگرم', 'گرم'], base0to1: 1000, base1to2: 1000,
+                ruleText: '۱ کیلوگرم = ۱۰۰۰ گرم'
             }
         };
 
@@ -480,8 +474,33 @@
             document.getElementById('hdrUnit1').textContent = cfg.units[1];
             document.getElementById('hdrUnit2').textContent = cfg.units[2];
 
+            applyColumnLayout(!!cfg.twoCols);
             updateStatsUI();
             loadNewQuestion();
+        }
+
+        function applyColumnLayout(isTwoCols) {
+            const rows = ['gridHeaderRow', 'helperButtonsRow', 'topNumberRow', 'botNumberRow', 'ansNumberRow', 'carryButtonsRow'];
+            rows.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('grid-cols-9', isTwoCols);
+                el.classList.toggle('grid-cols-10', !isTwoCols);
+            });
+
+            const col0Ids = ['hdrUnit0', 'colHelper0', 'topHour', 'botHour', 'colAns0', 'colCarry0'];
+            col0Ids.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('hidden', isTwoCols);
+            });
+
+            const expandIds = ['hdrUnit1', 'hdrUnit2', 'colHelper1', 'colHelper2', 'topMin', 'topSec', 'botMin', 'botSec', 'colAns1', 'colAns2', 'colCarry1', 'colCarry2'];
+            expandIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.classList.toggle('col-span-4', isTwoCols);
+                el.classList.toggle('col-span-3', !isTwoCols);
+            });
         }
 
         function restartCurrentLevel() { startGame(gameState.level); }
@@ -491,7 +510,34 @@
             const op = Math.random() < 0.5 ? '+' : '-';
             let u0a = 1, u1a = 20, u2a = 20, u0b = 1, u1b = 10, u2b = 10;
 
-            if (level === 1) {
+            if (cfg.twoCols) {
+                u0a = 0; u0b = 0;
+                if (level === 1) {
+                    if (op === '+') {
+                        u1a = randInt(1, 5); u1b = randInt(1, 5);
+                        u2a = randInt(100, 450); u2b = randInt(50, 450);
+                    } else {
+                        u1a = randInt(4, 9); u1b = randInt(1, u1a - 1);
+                        u2a = randInt(500, 950); u2b = randInt(50, u2a - 50);
+                    }
+                } else if (level === 2) {
+                    if (op === '+') {
+                        u1a = randInt(1, 5); u1b = randInt(1, 5);
+                        u2a = randInt(550, 950); u2b = randInt(500, 950);
+                    } else {
+                        u1a = randInt(4, 9); u1b = randInt(1, u1a - 2);
+                        u2a = randInt(50, 350); u2b = randInt(550, 950);
+                    }
+                } else {
+                    if (op === '+') {
+                        u1a = randInt(2, 7); u1b = randInt(1, 6);
+                        u2a = randInt(600, 980); u2b = randInt(550, 980);
+                    } else {
+                        u1a = randInt(5, 12); u1b = randInt(1, u1a - 2);
+                        u2a = randInt(50, 300); u2b = randInt(600, 950);
+                    }
+                }
+            } else if (level === 1) {
                 if (op === '+') {
                     u0a = randInt(1, 4); u0b = randInt(1, 4);
                     u1a = randInt(10, Math.floor(cfg.base0to1 * 0.45));
@@ -541,8 +587,8 @@
 
             const ans2 = totalAns % cfg.base1to2;
             const mid = Math.floor(totalAns / cfg.base1to2);
-            const ans1 = mid % cfg.base0to1;
-            const ans0 = Math.floor(mid / cfg.base0to1);
+            const ans1 = cfg.twoCols ? mid : (mid % cfg.base0to1);
+            const ans0 = cfg.twoCols ? 0 : Math.floor(mid / cfg.base0to1);
 
             let story = '';
             if (level === 3) {
@@ -560,9 +606,9 @@
                     }
                 } else {
                     if (op === '+') {
-                        story = `کامیون اول ${toPersianNum(u0a)} تُن و ${toPersianNum(u1a)} کیلوگرم و ${toPersianNum(u2a)} گرم بار دارد و کامیون دوم ${toPersianNum(u0b)} تُن و ${toPersianNum(u1b)} کیلوگرم و ${toPersianNum(u2b)} گرم بار حمل می‌کند. جرم کل بار هر دو کامیون چقدر است؟`;
+                        story = `مادر برای پخت کیک ابتدا ${toPersianNum(u1a)} کیلوگرم و ${toPersianNum(u2a)} گرم آرد و سپس ${toPersianNum(u1b)} کیلوگرم و ${toPersianNum(u2b)} گرم شکر در ظرف ریخت. جرم کل مواد داخل ظرف چقدر است؟`;
                     } else {
-                        story = `در یک انبار ${toPersianNum(u0a)} تُن و ${toPersianNum(u1a)} کیلوگرم و ${toPersianNum(u2a)} گرم برنج وجود داشت. اگر ${toPersianNum(u0b)} تُن و ${toPersianNum(u1b)} کیلوگرم و ${toPersianNum(u2b)} گرم از آن فروخته شود، چقدر برنج در انبار باقی می‌ماند؟`;
+                        story = `در یک کیسه ${toPersianNum(u1a)} کیلوگرم و ${toPersianNum(u2a)} گرم برنج وجود داشت. اگر ${toPersianNum(u1b)} کیلوگرم و ${toPersianNum(u2b)} گرم از آن پخته شود، چقدر برنج در کیسه باقی می‌ماند؟`;
                     }
                 }
             }
@@ -604,7 +650,7 @@
 
             ['ansHour', 'ansMin', 'ansSec'].forEach(id => {
                 const inp = document.getElementById(id);
-                inp.value = '';
+                inp.value = id === 'ansHour' && TOPIC_CONFIG[gameState.topic].twoCols ? '0' : '';
                 inp.disabled = false;
                 inp.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50');
             });
@@ -636,6 +682,7 @@
 
         function setupHelperButtons() {
             const q = gameState.question;
+            const cfg = TOPIC_CONFIG[gameState.topic];
             const bHour = document.getElementById('borrowHourBtn');
             const uHour = document.getElementById('unborrowHourBtn');
             const bMin = document.getElementById('borrowMinBtn');
@@ -646,16 +693,16 @@
             if (q.op === '-') {
                 cMin.classList.add('hidden');
                 cSec.classList.add('hidden');
-                bHour.classList.toggle('hidden', gameState.workTop0 <= 0);
+                bHour.classList.toggle('hidden', cfg.twoCols || gameState.workTop0 <= 0);
                 bMin.classList.toggle('hidden', gameState.workTop1 <= 0);
-                uHour.classList.toggle('hidden', gameState.borrowCount0 <= 0);
+                uHour.classList.toggle('hidden', cfg.twoCols || gameState.borrowCount0 <= 0);
                 uMin.classList.toggle('hidden', gameState.borrowCount1 <= 0);
             } else {
                 bHour.classList.add('hidden');
                 uHour.classList.add('hidden');
                 bMin.classList.add('hidden');
                 uMin.classList.add('hidden');
-                cMin.classList.remove('hidden');
+                cMin.classList.toggle('hidden', !!cfg.twoCols);
                 cSec.classList.remove('hidden');
             }
         }
@@ -741,8 +788,7 @@
         let manipState = {
             clockSec: 0,
             rulerCm: 0,
-            scaleLeft: 0,
-            scaleRight: 0
+            scaleWeights: []
         };
 
         function toggleManipulativeLab() {
@@ -753,14 +799,27 @@
             document.getElementById('toggleManipText').textContent = gameState.manipVisible ? 'مخفی کردن میز دست‌ورزی' : 'نمایش میز دست‌ورزی 🧰';
         }
 
+        function decomposeGramsToWeights(totalG) {
+            const denoms = [1000, 500, 200, 100, 50, 10, 1];
+            const res = [];
+            let rem = Math.max(0, Math.round(totalG));
+            for (const d of denoms) {
+                while (rem >= d) {
+                    res.push(d);
+                    rem -= d;
+                }
+            }
+            return res;
+        }
+
         function initManipulativeState() {
             const q = gameState.question;
             if (!q) return;
             if (gameState.topic === 'time') manipState.clockSec = ((q.u0a % 12) * 3600 + q.u1a * 60 + q.u2a) % 43200;
             else if (gameState.topic === 'length') manipState.rulerCm = q.u0a * 1000 + q.u1a * 10 + q.u2a;
             else {
-                manipState.scaleLeft = q.u2a;
-                manipState.scaleRight = q.u2b;
+                const totalA = q.u1a * 1000 + q.u2a;
+                manipState.scaleWeights = q.op === '+' ? decomposeGramsToWeights(totalA) : [];
             }
         }
 
@@ -1041,9 +1100,7 @@
                         </div>
                     </div>
 
-                    <!-- محفظه متر نواری مندرج با مثلث نشانگر بالا -->
                     <div id="tapeMeasureBox" dir="ltr" class="tape-measure-box relative w-full select-none rounded-2xl bg-slate-800 p-2 pt-8 shadow-inner border-2 border-slate-700 overflow-hidden" style="touch-action: none;">
-                        <!-- علامت مثلث نشانگر ثابت در بالا که عدد زیر خود را روی متر می‌خواند -->
                         <div class="pointer-events-none absolute top-1 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center">
                             <div id="tapePointerReadout" class="bg-rose-600 text-white text-[11px] font-black px-2.5 py-0.5 rounded-full shadow-md whitespace-nowrap border border-rose-300" dir="rtl">
                                 ۰ متر و ۰ سانتی‌متر و ۰ میلی‌متر
@@ -1053,29 +1110,31 @@
                             </svg>
                         </div>
 
-                        <!-- خط راهنمای عمودی زیر مثلث -->
                         <div class="pointer-events-none absolute top-9 bottom-2 left-1/2 -translate-x-1/2 w-0.5 bg-rose-500/90 z-20"></div>
 
-                        <!-- نوار زرد متر مندرج -->
                         <div class="relative h-20 w-full rounded-xl bg-gradient-to-b from-amber-300 via-yellow-300 to-amber-400 border-2 border-amber-500 overflow-hidden shadow-md">
                             <svg id="tapeMeasureSvg" viewBox="0 0 360 80" class="w-full h-full block">
                                 <g id="tapeTicksLayer"></g>
                             </svg>
                         </div>
                         <div class="text-[10px] text-slate-300 font-bold mt-1.5" dir="rtl">
-                            👆 نوار متر را به چپ و راست بکشید تا مقدار زیر مثلث تغییر کند
+                            👆 نوار متر را به چپ و راست بکشید (سبز: افزایش • قرمز: کاهش نسبت به عدد اول)
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-4 gap-1.5 text-[11px] font-bold" dir="rtl">
-                        <button onclick="stepRuler(-1)" class="btn-3d bg-rose-100 hover:bg-rose-200 text-rose-900 py-1.5 rounded-lg">−۱ م‌م</button>
-                        <button onclick="stepRuler(1)" class="btn-3d bg-emerald-100 hover:bg-emerald-200 text-emerald-900 py-1.5 rounded-lg">+۱ م‌م</button>
-                        <button onclick="stepRuler(-10)" class="btn-3d bg-sky-100 hover:bg-sky-200 text-sky-900 py-1.5 rounded-lg">−۱ س‌م</button>
-                        <button onclick="stepRuler(10)" class="btn-3d bg-sky-200 hover:bg-sky-300 text-sky-950 py-1.5 rounded-lg">+۱ س‌م</button>
-                    </div>
-                    <div class="grid grid-cols-2 gap-1.5 text-[11px] font-bold" dir="rtl">
-                        <button onclick="stepRuler(-100)" class="btn-3d bg-purple-100 hover:bg-purple-200 text-purple-900 py-1.5 rounded-lg">−۱۰ سانتی‌متر (۱۰۰ م‌م)</button>
-                        <button onclick="stepRuler(100)" class="btn-3d bg-purple-200 hover:bg-purple-300 text-purple-950 py-1.5 rounded-lg">+۱۰ سانتی‌متر (۱۰۰ م‌م)</button>
+                    <div class="grid grid-cols-4 gap-1 text-[10px] sm:text-xs font-bold w-full" dir="rtl">
+                        <button onclick="stepRuler(1)" class="btn-3d bg-emerald-100 hover:bg-emerald-200 text-emerald-900 py-1 px-1 rounded">+۱ م‌م</button>
+                        <button onclick="stepRuler(-1)" class="btn-3d bg-emerald-50 hover:bg-emerald-100 text-emerald-800 py-1 px-1 rounded">−۱ م‌م</button>
+                        <button onclick="stepRuler(10)" class="btn-3d bg-emerald-200 hover:bg-emerald-300 text-emerald-950 py-1 px-1 rounded">+۱۰ م‌م</button>
+                        <button onclick="stepRuler(-10)" class="btn-3d bg-emerald-50 hover:bg-emerald-100 text-emerald-900 py-1 px-1 rounded">−۱۰ م‌م</button>
+
+                        <button onclick="stepRuler(10)" class="btn-3d bg-sky-100 hover:bg-sky-200 text-sky-900 py-1 px-1 rounded">+۱ س‌م</button>
+                        <button onclick="stepRuler(-10)" class="btn-3d bg-sky-50 hover:bg-sky-100 text-sky-800 py-1 px-1 rounded">−۱ س‌م</button>
+                        <button onclick="stepRuler(100)" class="btn-3d bg-sky-200 hover:bg-sky-300 text-sky-950 py-1 px-1 rounded">+۱۰ س‌م</button>
+                        <button onclick="stepRuler(-100)" class="btn-3d bg-sky-50 hover:bg-sky-100 text-sky-900 py-1 px-1 rounded">−۱۰ س‌م</button>
+
+                        <button onclick="stepRuler(-1000)" class="btn-3d bg-purple-50 hover:bg-purple-100 text-purple-900 py-1 px-1 rounded col-span-2">−۱ متر</button>
+                        <button onclick="stepRuler(1000)" class="btn-3d bg-purple-100 hover:bg-purple-200 text-purple-950 py-1 px-1 rounded col-span-2">+۱ متر</button>
                     </div>
 
                     <button onclick="manipState.rulerCm = gameState.question.u0a * 1000 + gameState.question.u1a * 10 + gameState.question.u2a; playSound('pop'); updateTapeVisuals();"
@@ -1117,7 +1176,30 @@
             const startMm = Math.max(0, totalMm - visibleHalfMm);
             const endMm = totalMm + visibleHalfMm;
 
+            const q = gameState.question;
+            const initialMm = q ? (q.u0a * 1000 + q.u1a * 10 + q.u2a) : totalMm;
+            const initialX = centerX + (initialMm - totalMm) * pxPerMm;
+
             let svgContent = '';
+
+            if (totalMm > initialMm) {
+                const rectStart = Math.max(-20, initialX);
+                const rectWidth = Math.max(0, centerX - rectStart);
+                if (rectWidth > 0) {
+                    svgContent += `<rect x="${rectStart}" y="0" width="${rectWidth}" height="80" fill="#22c55e" opacity="0.45"/>`;
+                }
+            } else if (totalMm < initialMm) {
+                const rectEnd = Math.min(380, initialX);
+                const rectWidth = Math.max(0, rectEnd - centerX);
+                if (rectWidth > 0) {
+                    svgContent += `<rect x="${centerX}" y="0" width="${rectWidth}" height="80" fill="#ef4444" opacity="0.45"/>`;
+                }
+            }
+
+            if (initialX >= -10 && initialX <= 370) {
+                svgContent += `<line x1="${initialX}" y1="0" x2="${initialX}" y2="80" stroke="#1d4ed8" stroke-width="2" stroke-dasharray="4 3"/>`;
+            }
+
             for (let t = startMm; t <= endMm; t++) {
                 const x = centerX + (t - totalMm) * pxPerMm;
                 const isSelected = t === totalMm;
@@ -1197,90 +1279,207 @@
         }
 
         function renderScaleLab(container) {
-            const leftG = manipState.scaleLeft;
-            const rightG = manipState.scaleRight;
-            const diff = rightG - leftG;
-            const tiltDeg = Math.max(-18, Math.min(18, diff / 50));
+            const q = gameState.question;
+            const totalA = q ? (q.u1a * 1000 + q.u2a) : 0;
+            const totalB = q ? (q.u1b * 1000 + q.u2b) : 0;
+            const targetAnsG = q ? (q.op === '+' ? totalA + totalB : totalA - totalB) : 0;
+
+            const currentG = manipState.scaleWeights.reduce((acc, w) => acc + w, 0);
+            const curKg = Math.floor(currentG / 1000);
+            const curRemG = currentG % 1000;
 
             const formatWeight = (g) => {
                 const kg = Math.floor(g / 1000);
                 const remG = g % 1000;
-                if (kg > 0) return `${toPersianNum(kg)} ک‌گ و ${toPersianNum(remG)} گ`;
+                if (kg > 0 && remG > 0) return `${toPersianNum(kg)} کیلوگرم و ${toPersianNum(remG)} گرم`;
+                if (kg > 0) return `${toPersianNum(kg)} کیلوگرم`;
                 return `${toPersianNum(remG)} گرم`;
             };
 
-            const statusText = leftG === rightG
-                ? '⚖️ ترازو کاملاً متعادل است!'
-                : (leftG > rightG ? '⬅️ کفه چپ سنگین‌تر است' : '➡️ کفه راست سنگین‌تر است');
+            const getWeightLabel = (w) => w === 1000 ? '۱ کیلویی' : `${toPersianNum(w)} گرمی`;
+            const getWeightStyle = (w) => {
+                if (w === 1000) return { bg: '#7c3aed', border: '#4c1d95', w: 34, h: 22 };
+                if (w === 500) return { bg: '#0284c7', border: '#0c4a6e', w: 29, h: 19 };
+                if (w === 200) return { bg: '#059669', border: '#064e3b', w: 26, h: 17 };
+                if (w === 100) return { bg: '#d97706', border: '#78350f', w: 23, h: 15 };
+                if (w === 50) return { bg: '#e11d48', border: '#881337', w: 21, h: 14 };
+                if (w === 10) return { bg: '#475569', border: '#0f172a', w: 19, h: 13 };
+                return { bg: '#ca8a04', border: '#713f12', w: 17, h: 12 };
+            };
+
+            const visibleWeights = manipState.scaleWeights.slice(-12);
+            let weightsSvg = '';
+            visibleWeights.forEach((w, idx) => {
+                const st = getWeightStyle(w);
+                const col = idx % 6;
+                const row = Math.floor(idx / 6);
+                const x = 62 + col * 33;
+                const y = 66 - st.h - row * 21;
+                weightsSvg += `
+                    <g>
+                        <rect x="${x}" y="${y}" width="${st.w}" height="${st.h}" rx="3.5" fill="${st.bg}" stroke="${st.border}" stroke-width="1.4"/>
+                        <rect x="${x + st.w / 2 - 4}" y="${y - 3}" width="8" height="3" rx="1.5" fill="${st.border}"/>
+                        <text x="${x + st.w / 2}" y="${y + st.h - 4}" font-size="7.5" font-weight="900" fill="#ffffff" text-anchor="middle">${w === 1000 ? '1kg' : w}</text>
+                    </g>
+                `;
+            });
+
+            const isMatchedAnswer = currentG === targetAnsG;
+            const statusText = isMatchedAnswer
+                ? `🎉 آفرین! ترازوی دیجیتال دقیقاً پاسخ سوال (${formatWeight(currentG)}) را نشان می‌دهد!`
+                : `⚖️ وزن روی کفه ترازو: ${formatWeight(currentG)}`;
+
+            const statusBadgeClass = isMatchedAnswer
+                ? 'bg-emerald-100 text-emerald-950 border-emerald-400 animate-pulse'
+                : 'bg-sky-50 text-sky-900 border-sky-200';
+
+            const weightDenominations = [
+                { val: 1, label: '۱ گرمی', color: 'bg-yellow-100 hover:bg-yellow-200 text-yellow-950 border-yellow-400' },
+                { val: 10, label: '۱۰ گرمی', color: 'bg-slate-200 hover:bg-slate-300 text-slate-900 border-slate-400' },
+                { val: 50, label: '۵۰ گرمی', color: 'bg-rose-100 hover:bg-rose-200 text-rose-950 border-rose-300' },
+                { val: 100, label: '۱۰۰ گرمی', color: 'bg-amber-100 hover:bg-amber-200 text-amber-950 border-amber-300' },
+                { val: 200, label: '۲۰۰ گرمی', color: 'bg-emerald-100 hover:bg-emerald-200 text-emerald-950 border-emerald-300' },
+                { val: 500, label: '۵۰۰ گرمی', color: 'bg-sky-100 hover:bg-sky-200 text-sky-950 border-sky-300' },
+                { val: 1000, label: '۱ کیلویی', color: 'bg-purple-100 hover:bg-purple-200 text-purple-950 border-purple-300' }
+            ];
+
+            const stoneButtonsHtml = weightDenominations.map(d => `
+                <button onclick="addWeightToScale(${d.val})" class="btn-3d ${d.color} border font-black py-1.5 px-1 rounded-xl text-[10px] sm:text-[11px] flex flex-col items-center justify-center shadow-xs">
+                    <span class="text-xs">🪨</span>
+                    <span>${d.label}</span>
+                </button>
+            `).join('');
+
+            const activeChipsHtml = manipState.scaleWeights.length === 0
+                ? '<span class="text-[11px] text-slate-400 font-medium">هنوز سنگ وزنه‌ای روی ترازو نگذاشته‌ای...</span>'
+                : manipState.scaleWeights.map((w, idx) => `
+                    <button onclick="removeWeightFromScale(${idx})" title="کلیک برای برداشتن وزنه" class="inline-flex items-center gap-1 bg-white hover:bg-rose-50 text-slate-800 hover:text-rose-700 border border-slate-300 hover:border-rose-300 rounded-lg px-2 py-0.5 text-[11px] font-black shadow-2xs transition-colors">
+                        <span>${getWeightLabel(w)}</span>
+                        <span class="text-rose-500 text-xs">×</span>
+                    </button>
+                `).join('');
+
+            const guideHint = q && q.op === '+'
+                ? `💡 جرم عدد اول (${formatWeight(totalA)}) روی ترازو است؛ حالا سنگ‌های عدد دوم (${formatWeight(totalB)}) را روی ترازو بگذار!`
+                : `💡 سنگ‌های وزنه را روی ترازو بگذار تا نمایشگر دیجیتال حاصل تفریق (${formatWeight(totalA)} منهای ${formatWeight(totalB)}) را نشان دهد.`;
 
             container.innerHTML = `
-                <div class="bg-white/95 rounded-xl p-3 border border-emerald-200 space-y-2 text-center">
-                    <div class="text-xs font-black text-emerald-900 bg-emerald-50 py-1 px-2 rounded-lg border border-emerald-200">
+                <div class="bg-white/95 rounded-2xl p-3 border border-emerald-200 space-y-2.5 text-center">
+                    <div class="text-xs font-black py-1.5 px-2.5 rounded-xl border ${statusBadgeClass}">
                         ${statusText}
                     </div>
 
-                    <svg viewBox="0 0 300 155" class="w-full max-w-[280px] mx-auto select-none">
-                        <polygon points="120,145 180,145 162,125 138,125" fill="#334155"/>
-                        <rect x="145" y="70" width="10" height="58" rx="3" fill="#475569"/>
-                        
-                        <g class="scale-beam" style="transform: rotate(${tiltDeg}deg);">
-                            <line x1="55" y1="75" x2="245" y2="75" stroke="#0f172a" stroke-width="6" stroke-linecap="round"/>
-                            <circle cx="150" cy="75" r="8" fill="#f59e0b" stroke="#78350f" stroke-width="2"/>
-                            
-                            <g style="transform: translate(55px, 75px) rotate(${-tiltDeg}deg);">
-                                <line x1="0" y1="0" x2="-22" y2="35" stroke="#64748b" stroke-width="2"/>
-                                <line x1="0" y1="0" x2="22" y2="35" stroke="#64748b" stroke-width="2"/>
-                                <path d="M -32,35 Q 0,48 32,35 Z" fill="#f59e0b" stroke="#b45309" stroke-width="2"/>
-                                <rect x="-18" y="17" width="36" height="18" rx="4" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
-                                <text x="0" y="29" font-size="10" font-weight="900" fill="#78350f" text-anchor="middle">${toPersianNum(leftG)}g</text>
-                            </g>
+                    <!-- تصویر ترازوی دیجیتال تک‌کفه‌ای با نمایشگر LCD -->
+                    <svg viewBox="0 0 320 175" class="w-full max-w-[300px] mx-auto select-none drop-shadow-md">
+                        <defs>
+                            <linearGradient id="scaleBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#f8fafc"/>
+                                <stop offset="65%" stop-color="#e2e8f0"/>
+                                <stop offset="100%" stop-color="#cbd5e1"/>
+                            </linearGradient>
+                            <linearGradient id="platterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#94a3b8"/>
+                                <stop offset="50%" stop-color="#e2e8f0"/>
+                                <stop offset="100%" stop-color="#94a3b8"/>
+                            </linearGradient>
+                        </defs>
 
-                            <g style="transform: translate(245px, 75px) rotate(${-tiltDeg}deg);">
-                                <line x1="0" y1="0" x2="-22" y2="35" stroke="#64748b" stroke-width="2"/>
-                                <line x1="0" y1="0" x2="22" y2="35" stroke="#64748b" stroke-width="2"/>
-                                <path d="M -32,35 Q 0,48 32,35 Z" fill="#10b981" stroke="#047857" stroke-width="2"/>
-                                <rect x="-18" y="17" width="36" height="18" rx="4" fill="#d1fae5" stroke="#059669" stroke-width="1.5"/>
-                                <text x="0" y="29" font-size="10" font-weight="900" fill="#065f46" text-anchor="middle">${toPersianNum(rightG)}g</text>
-                            </g>
-                        </g>
+                        <!-- سنگ‌های وزنه قرار داده شده روی سینی ترازو -->
+                        ${weightsSvg}
+
+                        <!-- پایه سینی و سینی استیل ترازو -->
+                        <rect x="142" y="72" width="36" height="12" rx="2" fill="#64748b"/>
+                        <rect x="46" y="66" width="228" height="8" rx="4" fill="url(#platterGrad)" stroke="#475569" stroke-width="1.5"/>
+
+                        <!-- بدنه ترازوی دیجیتال -->
+                        <path d="M 38,84 L 282,84 L 298,154 Q 300,164 288,164 L 32,164 Q 20,164 22,154 Z" fill="url(#scaleBodyGrad)" stroke="#64748b" stroke-width="2"/>
+                        <!-- پایه‌های لاستیکی زیر ترازو -->
+                        <rect x="42" y="164" width="26" height="6" rx="2" fill="#1e293b"/>
+                        <rect x="252" y="164" width="26" height="6" rx="2" fill="#1e293b"/>
+
+                        <!-- قاب نمایشگر دیجیتال LCD -->
+                        <rect x="64" y="96" width="192" height="44" rx="8" fill="#0f172a" stroke="#334155" stroke-width="2.5"/>
+                        <rect x="70" y="101" width="180" height="34" rx="5" fill="#064e3b"/>
+
+                        <!-- عدد دیجیتال روی صفحه نمایش -->
+                        <text x="160" y="124" font-size="16" font-weight="900" fill="#6ee7b7" text-anchor="middle">${toPersianNum(curKg)} کیلوگرم و ${toPersianNum(curRemG)} گرم</text>
+
+                        <!-- برچسب کل بر حسب گرم روی بدنه -->
+                        <rect x="108" y="145" width="104" height="14" rx="4" fill="#334155"/>
+                        <text x="160" y="155" font-size="8.5" font-weight="800" fill="#f8fafc" text-anchor="middle">کل: ${toPersianNum(currentG)} گرم</text>
                     </svg>
 
-                    <div class="grid grid-cols-2 gap-2 text-[11px] font-bold">
-                        <div class="bg-amber-50 border border-amber-200 p-1.5 rounded-lg text-amber-950">
-                            <div>کفه چپ:</div>
-                            <div class="font-black text-xs mt-0.5">${formatWeight(leftG)}</div>
+                    <div class="grid grid-cols-2 gap-2 text-center" dir="rtl">
+                        <div class="bg-purple-50 border border-purple-200 rounded-xl p-1.5">
+                            <div class="text-base font-black text-purple-900">${toPersianNum(curKg)}</div>
+                            <div class="text-[10px] font-bold text-purple-700">کیلوگرم</div>
                         </div>
-                        <div class="bg-emerald-50 border border-emerald-200 p-1.5 rounded-lg text-emerald-950">
-                            <div>کفه راست:</div>
-                            <div class="font-black text-xs mt-0.5">${formatWeight(rightG)}</div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 text-[10px] font-bold">
-                        <div class="space-y-1">
-                            <button onclick="stepScale('left', 100)" class="w-full btn-3d bg-amber-100 hover:bg-amber-200 text-amber-950 py-1 rounded">+۱۰۰ گرم چپ</button>
-                            <button onclick="stepScale('left', 500)" class="w-full btn-3d bg-amber-200 hover:bg-amber-300 text-amber-950 py-1 rounded">+۵۰۰ گرم چپ</button>
-                            <button onclick="stepScale('left', 1000)" class="w-full btn-3d bg-amber-300 hover:bg-amber-400 text-amber-950 py-1 rounded">+۱ کیلوگرم چپ</button>
-                        </div>
-                        <div class="space-y-1">
-                            <button onclick="stepScale('right', 100)" class="w-full btn-3d bg-emerald-100 hover:bg-emerald-200 text-emerald-950 py-1 rounded">+۱۰۰ گرم راست</button>
-                            <button onclick="stepScale('right', 500)" class="w-full btn-3d bg-emerald-200 hover:bg-emerald-300 text-emerald-950 py-1 rounded">+۵۰۰ گرم راست</button>
-                            <button onclick="stepScale('right', 1000)" class="w-full btn-3d bg-emerald-300 hover:bg-emerald-400 text-emerald-950 py-1 rounded">+۱ کیلوگرم راست</button>
+                        <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-1.5">
+                            <div class="text-base font-black text-emerald-900">${toPersianNum(curRemG)}</div>
+                            <div class="text-[10px] font-bold text-emerald-700">گرم</div>
                         </div>
                     </div>
 
-                    <button onclick="manipState.scaleLeft = gameState.question.u2a; manipState.scaleRight = gameState.question.u2b; playSound('pop'); renderManipulativeLab();"
-                        class="w-full text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-800 py-1.5 rounded-lg border border-slate-300">
-                        🔄 بازنشانی وزنه‌ها
-                    </button>
+                    <div class="bg-indigo-50/80 border border-indigo-200 rounded-xl p-1.5 text-[11px] font-bold text-indigo-900">
+                        ${guideHint}
+                    </div>
+
+                    <!-- جعبه سنگ‌های وزنه استاندارد -->
+                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-2 space-y-1.5">
+                        <div class="text-[11px] font-black text-slate-700 text-right">
+                            🧰 جعبه سنگ‌های وزنه (کلیک کن تا روی ترازو قرار گیرد):
+                        </div>
+                        <div class="grid grid-cols-4 sm:grid-cols-7 gap-1.5">
+                            ${stoneButtonsHtml}
+                        </div>
+                    </div>
+
+                    <!-- نمایش سنگ‌های روی سینی ترازو با قابلیت برداشتن تکی -->
+                    <div class="bg-emerald-50/60 border border-emerald-200 rounded-xl p-2 text-right">
+                        <div class="text-[10px] font-black text-emerald-900 mb-1">سنگ‌های روی ترازو (برای برداشتن روی هر وزنه کلیک کن):</div>
+                        <div class="flex flex-wrap gap-1 min-h-[26px] items-center">
+                            ${activeChipsHtml}
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="clearDigitalScale()"
+                            class="btn-3d text-xs font-bold bg-rose-100 hover:bg-rose-200 text-rose-900 py-1.5 rounded-xl border border-rose-300">
+                            🗑️ صفر کردن ترازو
+                        </button>
+                        <button onclick="resetDigitalScaleToInitial()"
+                            class="btn-3d text-xs font-bold bg-amber-100 hover:bg-amber-200 text-amber-900 py-1.5 rounded-xl border border-amber-300">
+                            🔄 تنظیم روی عدد اول
+                        </button>
+                    </div>
                 </div>
             `;
         }
 
-        function stepScale(side, grams) {
+        function addWeightToScale(grams) {
             playSound('pop');
-            if (side === 'left') manipState.scaleLeft += grams;
-            else manipState.scaleRight += grams;
+            manipState.scaleWeights.push(grams);
+            renderManipulativeLab();
+        }
+
+        function removeWeightFromScale(index) {
+            playSound('tick');
+            manipState.scaleWeights.splice(index, 1);
+            renderManipulativeLab();
+        }
+
+        function clearDigitalScale() {
+            playSound('pop');
+            manipState.scaleWeights = [];
+            renderManipulativeLab();
+        }
+
+        function resetDigitalScaleToInitial() {
+            const q = gameState.question;
+            if (!q) return;
+            playSound('pop');
+            const totalA = q.u1a * 1000 + q.u2a;
+            manipState.scaleWeights = q.op === '+' ? decomposeGramsToWeights(totalA) : [];
             renderManipulativeLab();
         }
 
@@ -1288,27 +1487,29 @@
             if (gameState.answeredCurrent) return;
             const q = gameState.question;
             const cfg = TOPIC_CONFIG[gameState.topic];
-            const r0 = document.getElementById('ansHour').value.trim();
+            const r0 = cfg.twoCols ? '0' : document.getElementById('ansHour').value.trim();
             const r1 = document.getElementById('ansMin').value.trim();
             const r2 = document.getElementById('ansSec').value.trim();
 
             if (r0 === '' || r1 === '' || r2 === '') {
                 playSound('wrong');
-                showFeedback('warning', 'کادرها را پر کن', 'لطفاً پاسخ هر سه ستون را وارد کن.');
+                showFeedback('warning', 'کادرها را پر کن', cfg.twoCols ? 'لطفاً پاسخ هر دو ستون را وارد کن.' : 'لطفاً پاسخ هر سه ستون را وارد کن.');
                 return;
             }
 
-            const u0 = parseInt(r0);
+            const u0 = cfg.twoCols ? 0 : parseInt(r0);
             const u1 = parseInt(r1);
             const u2 = parseInt(r2);
 
             const userTotal = (u0 * cfg.base0to1 + u1) * cfg.base1to2 + u2;
             const ansTotal = (q.ans0 * cfg.base0to1 + q.ans1) * cfg.base1to2 + q.ans2;
 
-            if (userTotal === ansTotal && (u1 >= cfg.base0to1 || u2 >= cfg.base1to2)) {
+            if (userTotal === ansTotal && ((!cfg.twoCols && u1 >= cfg.base0to1) || u2 >= cfg.base1to2)) {
                 playSound('wrong');
                 showFeedback('warning', 'خیلی نزدیک شدی! تبدیل واحد یادت نرود ⬅️',
-                    `محاسبه‌ات درست است، اما در ستون «${cfg.units[1]}» یا «${cfg.units[2]}» عدد از حد مجاز بزرگ‌تر است. از دکمه «تبدیل واحد» زیر کادرها استفاده کن!`);
+                    cfg.twoCols
+                        ? `محاسبه‌ات درست است، اما در ستون «${cfg.units[2]}» عدد از ${toPersianNum(cfg.base1to2)} کوچک‌تر نیست. از دکمه «تبدیل واحد» زیر کادر استفاده کن!`
+                        : `محاسبه‌ات درست است، اما در ستون «${cfg.units[1]}» یا «${cfg.units[2]}» عدد از حد مجاز بزرگ‌تر است. از دکمه «تبدیل واحد» زیر کادرها استفاده کن!`);
                 return;
             }
 

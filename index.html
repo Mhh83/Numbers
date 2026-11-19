@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ماجراجویی اعداد مرکب - زمان، طول و جرم (کلاس پنجم)</title>
+    <title>ماجراجویی اعداد مرکب - زمان، طول، جرم و تاریخ (کلاس پنجم)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Vazirmatn Font -->
@@ -69,7 +69,7 @@
             </div>
             <div>
                 <h1 class="text-lg sm:text-xl font-black text-sky-900">ماجراجویی اعداد مرکب</h1>
-                <p class="text-[11px] sm:text-xs text-slate-500 font-medium">زمان • طول • جرم | ریاضی پایه پنجم</p>
+                <p class="text-[11px] sm:text-xs text-slate-500 font-medium">زمان • طول • جرم • تاریخ | ریاضی پایه پنجم</p>
             </div>
         </div>
 
@@ -95,7 +95,7 @@
             </div>
             <h2 class="text-2xl sm:text-3xl font-black text-slate-800 mb-4">کدام مبحث را تمرین می‌کنی؟</h2>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 max-w-4xl mx-auto mb-8">
                 <button id="topicBtn_time" onclick="selectTopic('time')" class="cursor-pointer rounded-2xl p-4 border-4 border-amber-400 bg-amber-50 shadow-md transition-all transform scale-105 text-center">
                     <div class="text-4xl mb-1">⏰</div>
                     <div class="font-black text-lg text-amber-950">اعداد مرکب زمان</div>
@@ -113,6 +113,12 @@
                     <div class="font-black text-lg text-emerald-950">اعداد مرکب جرم</div>
                     <div class="text-xs font-bold text-emerald-700 mt-1">کیلوگرم • گرم</div>
                 </button>
+
+                <button id="topicBtn_date" onclick="selectTopic('date')" class="cursor-pointer rounded-2xl p-4 border-2 border-slate-200 bg-white hover:bg-rose-50 transition-all text-center opacity-85 hover:opacity-100">
+                    <div class="text-4xl mb-1">📅</div>
+                    <div class="font-black text-lg text-rose-950">جمع و تفریق تاریخ</div>
+                    <div class="text-xs font-bold text-rose-700 mt-1">روز • ماه • سال شمسی</div>
+                </button>
             </div>
 
             <div class="border-t-2 border-slate-100 pt-6">
@@ -123,7 +129,7 @@
                             <div class="w-14 h-14 mx-auto bg-emerald-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md">🌱</div>
                             <span class="bg-emerald-200 text-emerald-900 text-xs font-extrabold px-3 py-1 rounded-full">سطح ۱ • آسان</span>
                             <h3 class="text-xl font-black text-emerald-950 mt-3 mb-2">مبتدی</h3>
-                            <p class="text-sm text-emerald-800 leading-relaxed">جمع و تفریق‌های ساده بدون نیاز به تبدیل یا قرض گرفتن.</p>
+                            <p id="levelDescription1" class="text-sm text-emerald-800 leading-relaxed">جمع و تفریق‌های ساده بدون نیاز به تبدیل یا قرض گرفتن.</p>
                         </div>
                         <button class="mt-6 w-full btn-3d bg-emerald-500 text-white font-bold py-3 rounded-2xl">شروع سطح ۱ 🚀</button>
                     </div>
@@ -133,7 +139,7 @@
                             <div class="w-14 h-14 mx-auto bg-blue-500 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md">🧭</div>
                             <span class="bg-blue-200 text-blue-900 text-xs font-extrabold px-3 py-1 rounded-full">سطح ۲ • متوسط</span>
                             <h3 class="text-xl font-black text-blue-950 mt-3 mb-2">کارآموز</h3>
-                            <p class="text-sm text-blue-800 leading-relaxed">تمرین سرریز کردن در جمع و قرض گرفتن در تفریق با میز دست‌ورزی.</p>
+                            <p id="levelDescription2" class="text-sm text-blue-800 leading-relaxed">تمرین سرریز کردن در جمع و قرض گرفتن در تفریق با میز دست‌ورزی.</p>
                         </div>
                         <button class="mt-6 w-full btn-3d bg-blue-500 text-white font-bold py-3 rounded-2xl">شروع سطح ۲ ⚡</button>
                     </div>
@@ -143,7 +149,7 @@
                             <div class="w-14 h-14 mx-auto bg-purple-600 text-white rounded-2xl flex items-center justify-center text-2xl mb-3 shadow-md">👑</div>
                             <span class="bg-purple-200 text-purple-900 text-xs font-extrabold px-3 py-1 rounded-full">سطح ۳ • پیشرفته</span>
                             <h3 class="text-xl font-black text-purple-950 mt-3 mb-2">استاد</h3>
-                            <p class="text-sm text-purple-800 leading-relaxed">مسائل ترکیبی و مسائل داستانی جذاب روزمره.</p>
+                            <p id="levelDescription3" class="text-sm text-purple-800 leading-relaxed">مسائل ترکیبی و مسائل داستانی جذاب روزمره.</p>
                         </div>
                         <button class="mt-6 w-full btn-3d bg-purple-600 text-white font-bold py-3 rounded-2xl">شروع سطح ۳ 🏆</button>
                     </div>
@@ -184,14 +190,22 @@
                 <div class="font-bold text-amber-800 mb-0.5">📜 مسئله داستانی:</div>
                 <p id="storyText"></p>
             </div>
+            <div id="dateQuestionBox" class="hidden bg-rose-50 border-r-4 border-rose-400 p-3 rounded-xl mb-3 text-center shadow-sm">
+                <div class="font-bold text-rose-900 mb-1">📅 عبارت تاریخ را حل کن:</div>
+                <div id="dateQuestionText" class="text-lg sm:text-xl font-black text-slate-800" dir="rtl"></div>
+                <p id="dateQuestionHelp" class="text-xs text-rose-800 mt-1">برای پیدا کردن پاسخ، از تقویم شمسی کمک بگیر.</p>
+            </div>
 
             <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
                 <h3 class="text-base sm:text-lg font-black text-slate-800 flex items-center gap-2">
                     <span class="w-2.5 h-2.5 rounded-full bg-sky-500 inline-block"></span>
-                    <span>عبارت زیر را به صورت ستونی حل کن:</span>
+                    <span id="questionInstruction">عبارت زیر را به صورت ستونی حل کن:</span>
                 </h3>
-                <button onclick="toggleManipulativeLab()" class="btn-3d bg-indigo-100 hover:bg-indigo-200 text-indigo-900 font-extrabold text-xs px-3 py-1.5 rounded-xl border border-indigo-300">
-                    🧰 <span id="toggleManipText">مخفی کردن میز دست‌ورزی</span>
+                <button id="dateModeBtn" onclick="toggleDateSolveMode()" class="hidden btn-3d bg-rose-100 hover:bg-rose-200 text-rose-900 font-extrabold text-xs px-3 py-1.5 rounded-xl border border-rose-300">
+                    <span id="dateModeIcon">✏️</span> <span id="dateModeText">محاسبه بدون تقویم</span>
+                </button>
+                <button id="manipToggleBtn" onclick="toggleManipulativeLab()" class="btn-3d bg-indigo-100 hover:bg-indigo-200 text-indigo-900 font-extrabold text-xs px-3 py-1.5 rounded-xl border border-indigo-300">
+                    <span id="toggleManipIcon">🧰</span> <span id="toggleManipText">مخفی کردن میز دست‌ورزی</span>
                 </button>
             </div>
 
@@ -216,7 +230,7 @@
 
                 <!-- جدول محاسبات ستونی -->
                 <div id="calcColumnWrapper" class="lg:col-span-6 bg-slate-50/70 rounded-2xl p-3 sm:p-4 border-2 border-sky-200">
-                    <div class="overflow-x-auto">
+                    <div id="standardCalculation" class="overflow-x-auto">
                         <div dir="ltr" class="min-w-[270px] max-w-md mx-auto bg-slate-50 rounded-xl p-2.5 sm:p-3.5 border border-slate-200 shadow-inner">
                             <div id="gridHeaderRow" class="grid grid-cols-10 gap-1.5 text-center font-black text-xs sm:text-sm mb-1.5">
                                 <div class="col-span-1"></div>
@@ -283,6 +297,11 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    <div id="dateAnswerPanel" class="hidden mb-2.5 bg-rose-50 border border-rose-200 rounded-xl p-3 text-center">
+                        <div class="text-xs font-bold text-rose-900 mb-1">تاریخی را که در تقویم انتخاب کردی بررسی کن:</div>
+                        <div id="dateAnswerDisplay" class="text-lg font-black text-rose-950">هنوز روزی انتخاب نشده</div>
                     </div>
 
                     <div id="feedbackBox" class="hidden mt-2.5 p-2.5 rounded-xl border-2 text-xs leading-relaxed animate-pop">
@@ -353,6 +372,10 @@
                     <div class="font-black text-emerald-900 mb-1">⚖️ واحدهای جرم (مبنای ۱۰۰۰):</div>
                     <p>هر <strong>۱۰۰۰ گرم</strong> = ۱ کیلوگرم</p>
                 </div>
+                <div class="bg-rose-50 p-3.5 rounded-2xl border border-rose-200">
+                    <div class="font-black text-rose-900 mb-1">📅 جمع و تفریق تاریخ:</div>
+                    <p>در سطح‌های بالاتر، سال و ماه را هم همراه روزها حساب کن. می‌توانی از تقویم کمک بگیری یا حالت محاسبهٔ ستونی را انتخاب کنی. در جمع، سال و ماه را حساب کن و سپس روزها را اضافه کن؛ در تفریق، روزها را کم کن و در صورت نیاز از ماه قبل قرض بگیر. اگر روز در ماه مقصد وجود نداشته باشد، آخرین روز همان ماه در نظر گرفته می‌شود.</p>
+                </div>
                 <div class="bg-indigo-50 p-3.5 rounded-2xl border border-indigo-200 text-xs">
                     <strong>نکته کلیدی:</strong> در جمع اگر حاصل یک ستون از مبنا بیشتر شد از دکمه <strong>«تبدیل واحد»</strong> استفاده کن. در تفریق اگر عدد بالا کوچک‌تر از پایین بود از ستون کناری <strong>«قرض»</strong> بگیر!
                 </div>
@@ -405,6 +428,82 @@
             } catch(e) {}
         }
 
+        const jalaliDateFormatter = new Intl.DateTimeFormat('en-u-ca-persian', {
+            year: 'numeric', month: 'numeric', day: 'numeric', timeZone: 'UTC'
+        });
+        const jalaliMonthFormatter = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+            month: 'long', timeZone: 'UTC'
+        });
+        const persianWeekdays = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه'];
+
+        function getJalaliParts(date) {
+            const parts = jalaliDateFormatter.formatToParts(date);
+            return {
+                year: Number(parts.find(part => part.type === 'year').value),
+                month: Number(parts.find(part => part.type === 'month').value),
+                day: Number(parts.find(part => part.type === 'day').value)
+            };
+        }
+
+        function jalaliDateToUtc(year, month, day) {
+            const approximateGregorianYear = year + 621;
+            const approximateMonthStart = new Date(Date.UTC(approximateGregorianYear, 2, 20 + (month - 1) * 30));
+            for (let offset = -10; offset <= 10; offset++) {
+                const candidate = new Date(approximateMonthStart);
+                candidate.setUTCDate(candidate.getUTCDate() + offset);
+                const parts = getJalaliParts(candidate);
+                if (parts.year === year && parts.month === month && parts.day === 1) {
+                    candidate.setUTCDate(candidate.getUTCDate() + day - 1);
+                    return candidate;
+                }
+            }
+            throw new RangeError(`تاریخ شمسی نامعتبر است: ${year}/${month}/${day}`);
+        }
+
+        function getJalaliMonthLength(year, month) {
+            const firstDay = jalaliDateToUtc(year, month, 1);
+            let length = 0;
+            for (let offset = 0; offset < 32; offset++) {
+                const date = new Date(firstDay);
+                date.setUTCDate(firstDay.getUTCDate() + offset);
+                const parts = getJalaliParts(date);
+                if (parts.year !== year || parts.month !== month) break;
+                length++;
+            }
+            return length;
+        }
+
+        function addJalaliMonths(date, monthDelta) {
+            const parts = getJalaliParts(date);
+            const totalMonths = parts.year * 12 + parts.month - 1 + monthDelta;
+            const targetYear = Math.floor(totalMonths / 12);
+            const targetMonth = ((totalMonths % 12) + 12) % 12 + 1;
+            const targetDay = Math.min(parts.day, getJalaliMonthLength(targetYear, targetMonth));
+            return jalaliDateToUtc(targetYear, targetMonth, targetDay);
+        }
+
+        function applyJalaliDuration(startDate, op, duration) {
+            const result = new Date(startDate);
+            const monthDelta = duration.years * 12 + duration.months;
+            if (op === '-') result.setUTCDate(result.getUTCDate() - duration.days);
+            const shifted = addJalaliMonths(result, (op === '+' ? 1 : -1) * monthDelta);
+            if (op === '+') shifted.setUTCDate(shifted.getUTCDate() + duration.days);
+            return shifted;
+        }
+
+        function formatJalaliDuration(duration) {
+            return [
+                duration.years ? `${toPersianNum(duration.years)} سال` : '',
+                duration.months ? `${toPersianNum(duration.months)} ماه` : '',
+                duration.days ? `${toPersianNum(duration.days)} روز` : ''
+            ].filter(Boolean).join(' و ');
+        }
+
+        function formatJalaliDate(date) {
+            const parts = getJalaliParts(date);
+            return `${toPersianNum(parts.year)}/${toPersianNum(String(parts.month).padStart(2, '0'))}/${toPersianNum(String(parts.day).padStart(2, '0'))}`;
+        }
+
         const TOPIC_CONFIG = {
             time: {
                 id: 'time', name: 'زمان', badge: '⏰ زمان', icon: '⏰',
@@ -421,6 +520,11 @@
                 twoCols: true,
                 units: ['', 'کیلوگرم', 'گرم'], base0to1: 1000, base1to2: 1000,
                 ruleText: '۱ کیلوگرم = ۱۰۰۰ گرم'
+            },
+            date: {
+                id: 'date', name: 'تاریخ', badge: '📅 تاریخ شمسی', icon: '📅',
+                units: ['سال', 'ماه', 'روز'],
+                ruleText: 'تقویم شمسی: ماه‌های ۲۹، ۳۰ یا ۳۱ روزه'
             }
         };
 
@@ -428,13 +532,14 @@
             topic: 'time', level: 1, currentQIndex: 0, totalQuestions: 10,
             score: 0, correctCount: 0, combo: 0, maxCombo: 0,
             question: null, workTop0: 0, workTop1: 0, workTop2: 0,
-            borrowCount0: 0, borrowCount1: 0, answeredCurrent: false, usedHintCurrent: false, manipVisible: true
+            borrowCount0: 0, borrowCount1: 0, answeredCurrent: false, usedHintCurrent: false,
+            manipVisible: true, dateSolveMode: 'calendar'
         };
 
         function selectTopic(topicId) {
             playSound('pop');
             gameState.topic = topicId;
-            ['time', 'length', 'mass'].forEach(t => {
+            ['time', 'length', 'mass', 'date'].forEach(t => {
                 const btn = document.getElementById(`topicBtn_${t}`);
                 if (t === topicId) {
                     btn.className = 'cursor-pointer rounded-2xl p-4 border-4 border-amber-400 bg-amber-50 shadow-md transform scale-105 text-center transition-all';
@@ -443,6 +548,12 @@
                 }
             });
             document.getElementById('headerIcon').textContent = TOPIC_CONFIG[topicId].icon;
+            const levelDescriptions = topicId === 'date'
+                ? ['تمرین جمع و تفریق روزها در یک ماه.', 'جمع و تفریق ماه و روز.', 'جمع و تفریق ترکیبی سال، ماه و روز.']
+                : ['جمع و تفریق‌های ساده بدون نیاز به تبدیل یا قرض گرفتن.', 'تمرین سرریز کردن در جمع و قرض گرفتن در تفریق با میز دست‌ورزی.', 'مسائل ترکیبی و مسائل داستانی جذاب روزمره.'];
+            levelDescriptions.forEach((text, index) => {
+                document.getElementById(`levelDescription${index + 1}`).textContent = text;
+            });
         }
 
         function showMenu() {
@@ -461,6 +572,7 @@
             gameState.correctCount = 0;
             gameState.combo = 0;
             gameState.maxCombo = 0;
+            gameState.dateSolveMode = 'calendar';
 
             const cfg = TOPIC_CONFIG[gameState.topic];
             document.getElementById('menuScreen').classList.add('hidden');
@@ -473,7 +585,16 @@
             document.getElementById('hdrUnit0').textContent = cfg.units[0];
             document.getElementById('hdrUnit1').textContent = cfg.units[1];
             document.getElementById('hdrUnit2').textContent = cfg.units[2];
+            document.getElementById('dateModeBtn').classList.toggle('hidden', gameState.topic !== 'date');
+            document.getElementById('manipToggleBtn').classList.toggle('hidden', gameState.topic === 'date');
 
+            gameState.manipVisible = true;
+            document.getElementById('manipulativeLab').classList.remove('hidden');
+            document.getElementById('toggleManipIcon').textContent = gameState.topic === 'date' ? '📅' : '🧰';
+            document.getElementById('toggleManipText').textContent = gameState.topic === 'date' ? 'مخفی کردن تقویم' : 'مخفی کردن میز دست‌ورزی';
+            document.getElementById('manipulativeLab').classList.toggle('lg:col-span-12', gameState.topic === 'date');
+            document.getElementById('manipulativeLab').classList.toggle('lg:col-span-6', gameState.topic !== 'date');
+            document.getElementById('calcColumnWrapper').className = 'bg-slate-50/70 rounded-2xl p-3 sm:p-4 border-2 border-sky-200' + (gameState.topic === 'date' ? ' lg:col-span-12' : ' lg:col-span-6');
             applyColumnLayout(!!cfg.twoCols);
             updateStatsUI();
             loadNewQuestion();
@@ -506,6 +627,7 @@
         function restartCurrentLevel() { startGame(gameState.level); }
 
         function generateQuestionData(topic, level) {
+            if (topic === 'date') return generateDateQuestion(level);
             const cfg = TOPIC_CONFIG[topic];
             const op = Math.random() < 0.5 ? '+' : '-';
             let u0a = 1, u1a = 20, u2a = 20, u0b = 1, u1b = 10, u2b = 10;
@@ -616,6 +738,24 @@
             return { op, u0a, u1a, u2a, u0b, u1b, u2b, ans0, ans1, ans2, story };
         }
 
+        function generateDateQuestion(level) {
+            const op = Math.random() < 0.5 ? '+' : '-';
+            const year = randInt(1402, 1405);
+            const month = randInt(1, 12);
+            const duration = level === 1
+                ? { years: 0, months: 0, days: randInt(1, 5) }
+                : level === 2
+                    ? { years: 0, months: randInt(1, 3), days: randInt(1, 20) }
+                    : { years: randInt(1, 2), months: randInt(1, 11), days: randInt(1, 30) };
+            const monthLength = getJalaliMonthLength(year, month);
+            const day = level === 1
+                ? (op === '+' ? randInt(1, monthLength - duration.days) : randInt(duration.days + 1, monthLength))
+                : randInt(1, monthLength);
+            const startDate = jalaliDateToUtc(year, month, day);
+            const answerDate = applyJalaliDuration(startDate, op, duration);
+            return { op, startDate, duration, answerDate };
+        }
+
         function loadNewQuestion() {
             gameState.currentQIndex++;
             gameState.answeredCurrent = false;
@@ -625,12 +765,30 @@
 
             const q = generateQuestionData(gameState.topic, gameState.level);
             gameState.question = q;
+            document.getElementById('questionCounter').textContent = toPersianNum(gameState.currentQIndex);
+            document.getElementById('progressBar').style.width = `${(gameState.currentQIndex / 10) * 100}%`;
+            if (gameState.topic === 'date') {
+                document.getElementById('storyBox').classList.add('hidden');
+                initManipulativeState();
+                renderDateQuestion(q);
+                document.getElementById('feedbackBox').classList.add('hidden');
+                document.getElementById('checkBtn').classList.remove('hidden');
+                document.getElementById('hintBtn').classList.remove('hidden');
+                document.getElementById('nextBtn').classList.add('hidden');
+                return;
+            }
+
+            document.getElementById('dateQuestionBox').classList.add('hidden');
+            document.getElementById('dateModeBtn').classList.add('hidden');
+            document.getElementById('manipToggleBtn').classList.remove('hidden');
+            document.getElementById('questionInstruction').textContent = 'عبارت زیر را به صورت ستونی حل کن:';
+            document.getElementById('standardCalculation').classList.remove('hidden');
+            document.getElementById('dateAnswerPanel').classList.add('hidden');
+            document.getElementById('helperButtonsRow').classList.remove('hidden');
+            document.getElementById('carryButtonsRow').classList.remove('hidden');
             gameState.workTop0 = q.u0a;
             gameState.workTop1 = q.u1a;
             gameState.workTop2 = q.u2a;
-
-            document.getElementById('questionCounter').textContent = toPersianNum(gameState.currentQIndex);
-            document.getElementById('progressBar').style.width = `${(gameState.currentQIndex / 10) * 100}%`;
 
             const storyBox = document.getElementById('storyBox');
             if (q.story) {
@@ -664,6 +822,68 @@
             setupHelperButtons();
             initManipulativeState();
             renderManipulativeLab();
+        }
+
+        function renderDateQuestion(q) {
+            const dateParts = getJalaliParts(q.startDate);
+            document.getElementById('dateQuestionBox').classList.remove('hidden');
+            document.getElementById('dateQuestionText').textContent =
+                `${formatJalaliDate(q.startDate)} ${q.op} ${formatJalaliDuration(q.duration)} = ؟`;
+            document.getElementById('dateModeBtn').classList.remove('hidden');
+            document.getElementById('manipToggleBtn').classList.add('hidden');
+            document.getElementById('dateModeBtn').disabled = false;
+            document.getElementById('standardCalculation').classList.toggle('hidden', gameState.dateSolveMode === 'calendar');
+            document.getElementById('dateAnswerPanel').classList.toggle('hidden', gameState.dateSolveMode !== 'calendar');
+            document.getElementById('manipulativeLab').classList.toggle('hidden', gameState.dateSolveMode !== 'calendar');
+            gameState.manipVisible = gameState.dateSolveMode === 'calendar';
+            document.getElementById('helperButtonsRow').classList.add('hidden');
+            document.getElementById('carryButtonsRow').classList.add('hidden');
+            document.getElementById('calcColumnWrapper').className =
+                'lg:col-span-12 bg-slate-50/70 rounded-2xl p-3 sm:p-4 border-2 border-sky-200';
+            document.getElementById('dateModeIcon').textContent = gameState.dateSolveMode === 'calendar' ? '✏️' : '📅';
+            document.getElementById('dateModeText').textContent =
+                gameState.dateSolveMode === 'calendar' ? 'محاسبه بدون تقویم' : 'بازگشت به تقویم';
+            document.getElementById('questionInstruction').textContent = gameState.dateSolveMode === 'calendar'
+                ? 'پاسخ را با انتخاب روز در تقویم پیدا کن:'
+                : 'پاسخ را به صورت ستونی در کادرها بنویس:';
+            document.getElementById('dateQuestionHelp').textContent = gameState.dateSolveMode === 'calendar'
+                ? 'می‌توانی ماه‌ها را ورق بزنی و روز درست را انتخاب کنی.'
+                : 'سال، ماه و روز را در کادرهای پاسخ وارد کن؛ در این حالت تقویم نمایش داده نمی‌شود.';
+            document.getElementById('dateAnswerDisplay').textContent = 'هنوز روزی انتخاب نشده';
+            document.getElementById('topHour').textContent = toPersianNum(dateParts.year);
+            document.getElementById('topMin').textContent = toPersianNum(dateParts.month);
+            document.getElementById('topSec').textContent = toPersianNum(dateParts.day);
+            document.getElementById('botHour').textContent = toPersianNum(q.duration.years);
+            document.getElementById('botMin').textContent = toPersianNum(q.duration.months);
+            document.getElementById('botSec').textContent = toPersianNum(q.duration.days);
+            const operator = document.getElementById('operatorSymbol');
+            operator.textContent = q.op;
+            operator.className = q.op === '+' ? 'col-span-1 text-2xl font-black text-emerald-600' : 'col-span-1 text-2xl font-black text-rose-500';
+            ['ansHour', 'ansMin', 'ansSec'].forEach(id => {
+                const input = document.getElementById(id);
+                input.value = '';
+                input.disabled = false;
+                input.classList.remove('border-emerald-500', 'bg-emerald-50', 'border-rose-500', 'bg-rose-50');
+            });
+            document.getElementById('feedbackBox').classList.add('hidden');
+            document.getElementById('checkBtn').classList.remove('hidden');
+            document.getElementById('hintBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+            if (gameState.dateSolveMode === 'calendar') {
+                gameState.manipVisible = true;
+                renderManipulativeLab();
+            }
+        }
+
+        function toggleDateSolveMode() {
+            if (gameState.topic !== 'date' || !gameState.question) return;
+            playSound('pop');
+            gameState.dateSolveMode = gameState.dateSolveMode === 'calendar' ? 'column' : 'calendar';
+            manipState.selectedDate = null;
+            if (gameState.dateSolveMode === 'calendar') {
+                manipState.calendarViewDate = new Date(gameState.question.startDate);
+            }
+            renderDateQuestion(gameState.question);
         }
 
         function renderTopRow() {
@@ -795,8 +1015,13 @@
             playSound('pop');
             gameState.manipVisible = !gameState.manipVisible;
             document.getElementById('manipulativeLab').classList.toggle('hidden', !gameState.manipVisible);
-            document.getElementById('calcColumnWrapper').className = gameState.manipVisible ? 'lg:col-span-6 bg-slate-50/70 rounded-2xl p-3 border-2 border-sky-200' : 'lg:col-span-12 bg-slate-50/70 rounded-2xl p-3 border-2 border-sky-200';
-            document.getElementById('toggleManipText').textContent = gameState.manipVisible ? 'مخفی کردن میز دست‌ورزی' : 'نمایش میز دست‌ورزی 🧰';
+            const isDateTopic = gameState.topic === 'date';
+            const spanClass = gameState.manipVisible && !isDateTopic ? 'lg:col-span-6' : 'lg:col-span-12';
+            document.getElementById('calcColumnWrapper').className = `${spanClass} bg-slate-50/70 rounded-2xl p-3 sm:p-4 border-2 border-sky-200`;
+            document.getElementById('toggleManipIcon').textContent = isDateTopic ? '📅' : '🧰';
+            document.getElementById('toggleManipText').textContent = gameState.manipVisible
+                ? (isDateTopic ? 'مخفی کردن تقویم' : 'مخفی کردن میز دست‌ورزی')
+                : (isDateTopic ? 'نمایش تقویم 📅' : 'نمایش میز دست‌ورزی 🧰');
         }
 
         function decomposeGramsToWeights(totalG) {
@@ -815,7 +1040,10 @@
         function initManipulativeState() {
             const q = gameState.question;
             if (!q) return;
-            if (gameState.topic === 'time') manipState.clockSec = ((q.u0a % 12) * 3600 + q.u1a * 60 + q.u2a) % 43200;
+            if (gameState.topic === 'date') {
+                manipState.calendarViewDate = new Date(q.startDate);
+                manipState.selectedDate = null;
+            } else if (gameState.topic === 'time') manipState.clockSec = ((q.u0a % 12) * 3600 + q.u1a * 60 + q.u2a) % 43200;
             else if (gameState.topic === 'length') manipState.rulerCm = q.u0a * 1000 + q.u1a * 10 + q.u2a;
             else {
                 const totalA = q.u1a * 1000 + q.u2a;
@@ -828,12 +1056,108 @@
             const cfg = TOPIC_CONFIG[gameState.topic];
             document.getElementById('manipIcon').textContent = cfg.icon;
             document.getElementById('manipTitle').textContent = `میز دست‌ورزی ${cfg.name}`;
+            document.getElementById('manipSubtitle').textContent = {
+                time: 'عقربه‌ها و ابزارها را بکش و تغییر بده!',
+                length: 'متر نواری را جابه‌جا کن و اندازه‌ها را ببین.',
+                mass: 'وزنه‌ها را روی ترازو بگذار و جرم را بخوان.',
+                date: 'ماه‌ها را ورق بزن و روزها را بشمار یا انتخاب کن.'
+            }[gameState.topic];
             document.getElementById('manipRuleBadge').textContent = cfg.ruleText;
 
             const ws = document.getElementById('manipWorkspace');
-            if (gameState.topic === 'time') renderClockLab(ws);
+            if (gameState.topic === 'date') {
+                document.getElementById('manipIcon').textContent = '📅';
+                document.getElementById('manipTitle').textContent = 'تقویم شمسی دست‌ورزی';
+                renderCalendarLab(ws);
+            } else if (gameState.topic === 'time') renderClockLab(ws);
             else if (gameState.topic === 'length') renderRulerLab(ws);
             else renderScaleLab(ws);
+        }
+
+        function renderCalendarLab(container) {
+            const q = gameState.question;
+            if (!q) return;
+            const viewParts = getJalaliParts(manipState.calendarViewDate);
+            const firstDay = jalaliDateToUtc(viewParts.year, viewParts.month, 1);
+            const monthName = jalaliMonthFormatter.format(firstDay);
+            const firstWeekdayOffset = (firstDay.getUTCDay() + 1) % 7;
+            const monthLength = getJalaliMonthLength(viewParts.year, viewParts.month);
+            const selectedTime = manipState.selectedDate ? manipState.selectedDate.getTime() : null;
+            const cells = [];
+
+            for (let blank = 0; blank < firstWeekdayOffset; blank++) {
+                cells.push('<span aria-hidden="true"></span>');
+            }
+            for (let day = 1; day <= monthLength; day++) {
+                const date = new Date(firstDay);
+                date.setUTCDate(firstDay.getUTCDate() + day - 1);
+                const timestamp = date.getTime();
+                const isStartDate = timestamp === q.startDate.getTime();
+                const isSelected = timestamp === selectedTime;
+                let dayClass = 'bg-white border-slate-200 text-slate-800 hover:bg-rose-50 hover:border-rose-300';
+                if (isStartDate) dayClass = 'bg-amber-100 border-amber-400 text-amber-950 ring-2 ring-amber-300';
+                if (isSelected) dayClass = 'bg-emerald-500 border-emerald-600 text-white ring-2 ring-emerald-300';
+                cells.push(`
+                    <button type="button" onclick="selectCalendarDay(${timestamp})"
+                        aria-label="${formatJalaliDate(date)}${isStartDate ? '، تاریخ شروع' : ''}"
+                        title="${isStartDate ? 'تاریخ شروع سوال' : ''}"
+                        class="btn-3d aspect-square rounded-xl border-2 font-black text-sm sm:text-base ${dayClass}">
+                        ${toPersianNum(day)}${isStartDate && !isSelected ? '<span class="block text-[8px] leading-none">شروع</span>' : ''}
+                    </button>
+                `);
+            }
+
+            container.innerHTML = `
+                <div class="bg-white rounded-2xl p-3 sm:p-4 border border-rose-200 space-y-3">
+                    <div class="flex items-center justify-between gap-2">
+                        <button type="button" onclick="changeCalendarMonth(-1)" aria-label="ماه قبل"
+                            class="btn-3d bg-rose-100 hover:bg-rose-200 text-rose-900 font-black px-3 py-2 rounded-xl">ماه قبل ⟵</button>
+                        <div class="text-center">
+                            <div class="font-black text-rose-950">${monthName}</div>
+                            <div class="text-xs font-bold text-rose-700">${toPersianNum(viewParts.year)}</div>
+                        </div>
+                        <button type="button" onclick="changeCalendarMonth(1)" aria-label="ماه بعد"
+                            class="btn-3d bg-rose-100 hover:bg-rose-200 text-rose-900 font-black px-3 py-2 rounded-xl">ماه بعد ⟶</button>
+                    </div>
+                    <div class="flex justify-center gap-2">
+                        <button type="button" onclick="changeCalendarMonth(-12)" aria-label="سال قبل"
+                            class="btn-3d bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-bold text-xs px-3 py-1.5 rounded-lg border border-indigo-200">سال قبل</button>
+                        <button type="button" onclick="changeCalendarMonth(12)" aria-label="سال بعد"
+                            class="btn-3d bg-indigo-50 hover:bg-indigo-100 text-indigo-900 font-bold text-xs px-3 py-1.5 rounded-lg border border-indigo-200">سال بعد</button>
+                    </div>
+                    <div class="grid grid-cols-7 gap-1 text-center">
+                        ${persianWeekdays.map(day => `<div class="py-1 text-[10px] sm:text-xs font-black text-slate-500">${day}</div>`).join('')}
+                        ${cells.join('')}
+                    </div>
+                    <div class="flex flex-wrap justify-center gap-3 text-[11px] font-bold text-slate-700">
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-amber-200 border border-amber-400"></span>تاریخ شروع</span>
+                        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-500 border border-emerald-600"></span>پاسخ انتخاب‌شده</span>
+                    </div>
+                    <p class="text-center text-[11px] text-slate-600">برای جواب، روز درست را انتخاب کن. ماه‌های شمسی ممکن است ۲۹، ۳۰ یا ۳۱ روز داشته باشند.</p>
+                </div>
+            `;
+        }
+
+        function changeCalendarMonth(offset) {
+            const parts = getJalaliParts(manipState.calendarViewDate);
+            const totalMonths = parts.year * 12 + parts.month - 1 + offset;
+            const year = Math.floor(totalMonths / 12);
+            const month = ((totalMonths % 12) + 12) % 12 + 1;
+            manipState.calendarViewDate = jalaliDateToUtc(year, month, 1);
+            playSound('tick');
+            renderManipulativeLab();
+        }
+
+        function selectCalendarDay(timestamp) {
+            const selectedDate = new Date(timestamp);
+            const selectedParts = getJalaliParts(selectedDate);
+            const viewParts = getJalaliParts(manipState.calendarViewDate);
+            if (selectedParts.year !== viewParts.year || selectedParts.month !== viewParts.month) return;
+            manipState.selectedDate = selectedDate;
+            document.getElementById('dateAnswerDisplay').textContent = formatJalaliDate(selectedDate);
+            document.getElementById('feedbackBox').classList.add('hidden');
+            playSound('pop');
+            renderManipulativeLab();
         }
 
         function renderClockLab(container) {
@@ -1486,6 +1810,44 @@
         function checkAnswer() {
             if (gameState.answeredCurrent) return;
             const q = gameState.question;
+            if (gameState.topic === 'date') {
+                let isCorrect = false;
+                if (gameState.dateSolveMode === 'calendar') {
+                    if (!manipState.selectedDate) {
+                        playSound('wrong');
+                        showFeedback('warning', 'یک روز را انتخاب کن', 'برای ثبت پاسخ، روز موردنظرت را در تقویم لمس کن.');
+                        return;
+                    }
+                    isCorrect = manipState.selectedDate.getTime() === q.answerDate.getTime();
+                } else {
+                    const values = ['ansHour', 'ansMin', 'ansSec']
+                        .map(id => document.getElementById(id).value.trim());
+                    if (values.some(value => value === '')) {
+                        playSound('wrong');
+                        showFeedback('warning', 'کادرها را پر کن', 'سال، ماه و روز پاسخ را در سه کادر وارد کن.');
+                        return;
+                    }
+                    const [year, month, day] = values.map(Number);
+                    if (![year, month, day].every(Number.isSafeInteger) || year < 1 || year > 9999 || month < 1 || month > 12 ||
+                        day < 1 || day > getJalaliMonthLength(year, month)) {
+                        playSound('wrong');
+                        showFeedback('warning', 'تاریخ واردشده معتبر نیست', 'ماه باید بین ۱ تا ۱۲ و روز باید در محدودهٔ همان ماه باشد.');
+                        return;
+                    }
+                    const answer = getJalaliParts(q.answerDate);
+                    isCorrect = year === answer.year && month === answer.month && day === answer.day;
+                }
+                if (isCorrect) {
+                    markCorrectAnswer();
+                } else {
+                    gameState.combo = 0;
+                    updateStatsUI();
+                    playSound('wrong');
+                    showFeedback('error', 'این پاسخ درست نیست؛ دوباره حساب کن', 'سال، ماه و روز را جداگانه بررسی کن و به طول ماه‌ها توجه داشته باش.');
+                }
+                return;
+            }
+
             const cfg = TOPIC_CONFIG[gameState.topic];
             const r0 = cfg.twoCols ? '0' : document.getElementById('ansHour').value.trim();
             const r1 = document.getElementById('ansMin').value.trim();
@@ -1516,25 +1878,7 @@
             const isOk = u0 === q.ans0 && u1 === q.ans1 && u2 === q.ans2;
 
             if (isOk) {
-                gameState.answeredCurrent = true;
-                gameState.correctCount++;
-                gameState.combo++;
-                if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
-                const earned = gameState.usedHintCurrent ? 10 : 15;
-                gameState.score += earned;
-                updateStatsUI();
-                playSound('correct');
-                if (typeof confetti === 'function') confetti({ particleCount: 55, spread: 65, origin: { y: 0.7 } });
-
-                ['ansHour', 'ansMin', 'ansSec'].forEach(id => {
-                    const el = document.getElementById(id);
-                    el.disabled = true;
-                    el.classList.add('border-emerald-500', 'bg-emerald-50');
-                });
-                document.getElementById('checkBtn').classList.add('hidden');
-                document.getElementById('hintBtn').classList.add('hidden');
-                document.getElementById('nextBtn').classList.remove('hidden');
-                showFeedback('success', `آفرین! کاملاً درست بود (+${toPersianNum(earned)} امتیاز) 🎉`, 'عالی عمل کردی! روی دکمه «سوال بعدی» بزن.');
+                markCorrectAnswer();
             } else {
                 gameState.combo = 0;
                 updateStatsUI();
@@ -1543,10 +1887,44 @@
             }
         }
 
+        function markCorrectAnswer() {
+            gameState.answeredCurrent = true;
+            gameState.correctCount++;
+            gameState.combo++;
+            if (gameState.combo > gameState.maxCombo) gameState.maxCombo = gameState.combo;
+            const earned = gameState.usedHintCurrent ? 10 : 15;
+            gameState.score += earned;
+            updateStatsUI();
+            playSound('correct');
+            if (typeof confetti === 'function') confetti({ particleCount: 55, spread: 65, origin: { y: 0.7 } });
+
+            ['ansHour', 'ansMin', 'ansSec'].forEach(id => {
+                const el = document.getElementById(id);
+                el.disabled = true;
+                el.classList.add('border-emerald-500', 'bg-emerald-50');
+            });
+            document.getElementById('checkBtn').classList.add('hidden');
+            document.getElementById('hintBtn').classList.add('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('dateModeBtn').disabled = true;
+            showFeedback('success', `آفرین! کاملاً درست بود (+${toPersianNum(earned)} امتیاز) 🎉`, 'عالی عمل کردی! روی دکمه «سوال بعدی» بزن.');
+        }
+
         function showSmartHint() {
             playSound('pop');
             gameState.usedHintCurrent = true;
             const q = gameState.question;
+            if (gameState.topic === 'date') {
+                const message = gameState.dateSolveMode === 'calendar'
+                    ? (q.op === '+'
+                        ? `از تاریخ ${formatJalaliDate(q.startDate)} شروع کن و ${formatJalaliDuration(q.duration)} را با کمک تقویم جلو برو.`
+                        : `از تاریخ ${formatJalaliDate(q.startDate)} شروع کن و ${formatJalaliDuration(q.duration)} را با کمک تقویم به عقب برگرد.`)
+                    : (q.op === '+'
+                        ? 'سال و ماه را حساب کن، سپس روزها را به تاریخِ مقصد اضافه کن. اگر از تعداد روزهای ماه مقصد گذشت، به ماه بعد برو.'
+                        : 'روزها را کم کن و در صورت نیاز از روزهای ماه قبل قرض بگیر؛ سپس ماه و سال را حساب کن. اگر روز در ماه مقصد نبود، آخرین روز آن ماه را بنویس.');
+                showFeedback('info', gameState.dateSolveMode === 'calendar' ? '💡 راهنمای تقویم' : '💡 راهنمای محاسبهٔ ستونی', message);
+                return;
+            }
             const cfg = TOPIC_CONFIG[gameState.topic];
 
             if (q.op === '+') {
